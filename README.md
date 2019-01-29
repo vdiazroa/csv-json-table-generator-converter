@@ -11,6 +11,7 @@ I also added the option to save as pdf (experimental version)
 
 to get the design is necessary add bootstrap css
 
+---
 
 if someone wanna take a look how it works: [Link to github webpage](https://vdiazroa.github.io/table-generator/)
 
