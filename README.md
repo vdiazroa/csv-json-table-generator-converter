@@ -6,6 +6,10 @@
 
 This small project was an idea I had when i was learning js.
 
+written in Vanilla JS ES6 Syntax
+
+used html2canvas and jspdf to export as pdf
+
 The idea of the project is create html tables and get the html code, from an csv file, or from a form, with the idea to use it in different webpages
 I also added the option to save as pdf (experimental version)
 
