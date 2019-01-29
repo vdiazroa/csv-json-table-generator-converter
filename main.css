@@ -1,0 +1,40 @@
+.titel {
+  font-weight: 700;
+}
+.input {
+  width: 14%;
+  margin: 1%;
+}
+form {
+  margin-bottom: 2rem;
+}
+table {
+  margin-top: 3rem;
+}
+.card-text {
+  font-size: 15px;
+  height: 300px;
+}
+table,
+td,
+th {
+  border: 1px solid black;
+  text-align: center;
+}
+td,
+th button {
+  padding: 1rem 2rem;
+}
+h1 {
+  text-align: center;
+}
+body {
+  margin-top: 2rem;
+}
+th button {
+  background-color: rgb(177, 117, 117);
+  width: 100%;
+}
+th button:hover {
+  background-color: rgb(143, 143, 143);
+}
