@@ -53,6 +53,12 @@ export default class TableGenerator {
     });
   }
 
+  collectionToCsv(collection) {
+    let string = Object.keys(collection[0]).join(",");
+    collection.forEach(col => (string += "\n" + Object.values(col).join(",")));
+    return string;
+  }
+
   parseTable() {
     let table = `<table class="table table-striped table-dark text-center">
     <thead>
