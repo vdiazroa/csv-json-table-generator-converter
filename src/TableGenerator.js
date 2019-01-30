@@ -3,7 +3,7 @@ export default class TableGenerator {
     this.options = {
       container: "#container-1",
       title: "Table Generator",
-      details: { "input 1": "text" },
+      details: { "": "text" },
       data: [""]
     };
     Object.assign(this.options, options);

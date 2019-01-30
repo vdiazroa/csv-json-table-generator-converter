@@ -18,7 +18,7 @@ export default class TableFromForm extends TableGenerator {
       ".titlesContainer"
     );
   }
-  registerEvents({ form, container, addCol }) {
+  registerEvents({ form, container }) {
     form.addEventListener("click", e => {
       e.preventDefault();
       if (e.target.closest(".generate-table")) {
@@ -40,9 +40,7 @@ export default class TableFromForm extends TableGenerator {
       } else if (e.target.closest(".addCol")) {
         e.stopPropagation();
         const colNumber = container.querySelectorAll(".title").length;
-        colNumber < 6
-          ? this.generateCol(colNumber)
-          : addCol.setAttribute("disabled", true);
+        this.generateCol(colNumber);
       }
     });
     form.addEventListener("keyup", e => {
@@ -60,6 +58,7 @@ export default class TableFromForm extends TableGenerator {
   }
 
   generateCol(colNumber) {
+    colNumber === 5 && this.elements.addCol.setAttribute("disabled", true);
     const newTitle = this.generateNewInput(colNumber);
     newTitle.classList.add("title");
     this.elements.titlesContainer.appendChild(newTitle);
@@ -127,7 +126,8 @@ export default class TableFromForm extends TableGenerator {
 
     this.options.detailsKeys.forEach(element => {
       const index = this.options.detailsKeys.indexOf(element);
-      inputText += `<input type='text' value='${element}' class='title input col form-control' col='${index}'>`;
+      inputText += `<input type='text' value="${element}" placeholder='input ${index +
+        1}' class='title input col form-control' col='${index}'>`;
     });
     inputText +=
       '</div><div class="div-green-btn col-3 col-lg-2 mt-1"><button class="addCol btn btn-success">+</button></div></div>';
@@ -151,8 +151,8 @@ export default class TableFromForm extends TableGenerator {
       inputText += `
         <input type='${this.options.details[i]}' value='${
         element[i]
-      }' col='${index}'
-        class='input col form-control' placeholder='${i}'>`;
+      }' col='${index}' placeholder='${i || "input " + (index + 1)}'
+        class='input col form-control'>`;
     }
     inputText += `</div><div class="col-3 col-lg-2 mt-2">
       <button class="addField btn btn-primary">+</button>
