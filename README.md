@@ -6,13 +6,18 @@
 
 This small project was an idea I had when i was learning js.
 
+written in Vanilla JS ES6 Syntax
+
+used html2canvas and jspdf to export as pdf
+
 The idea of the project is create html tables and get the html code, from an csv file, or from a form, with the idea to use it in different webpages
 I also added the option to save as pdf (experimental version)
 
 to get the design is necessary add bootstrap css
 
+---
 
-[Link to github webpage](https://vdiazroa.github.io/learning-js/tablegenerator/)
+if someone wanna take a look how it works: [Link to github webpage](https://vdiazroa.github.io/table-generator/)
 
 
 ---
