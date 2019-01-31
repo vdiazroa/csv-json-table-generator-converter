@@ -48,6 +48,7 @@ export default class TableFromForm extends TableGenerator {
       e.stopPropagation();
       if (title) {
         const colNumber = title.getAttribute("col");
+        this.titleValidator(title, colNumber);
         const col = form.querySelectorAll(`.divRow input[col='${colNumber}']`);
         this.options.detailsKeys[colNumber] = title.value;
         col.forEach(element => {
@@ -94,6 +95,23 @@ export default class TableFromForm extends TableGenerator {
           ? element.removeAttribute("disabled")
           : element.setAttribute("disabled", true);
       });
+    }
+  }
+
+  titleValidator(title, colNumber) {
+    const titles = this.elements.container.querySelectorAll(".title");
+    const titleValues = Array.from(titles).map(title => title.value);
+    titleValues.splice(colNumber, 1);
+    const allAdFields = this.elements.container.querySelectorAll(".addField");
+    const tableBtn = this.elements.container.querySelector(".generate-table");
+    if (titleValues.includes(title.value)) {
+      allAdFields.forEach(btn => btn.setAttribute("disabled", true));
+      tableBtn.setAttribute("disabled", true);
+      title.classList.add("border-red");
+    } else if (tableBtn.hasAttribute("disabled")) {
+      allAdFields.forEach(btn => btn.removeAttribute("disabled"));
+      tableBtn.removeAttribute("disabled");
+      title.classList.remove("border-red");
     }
   }
 

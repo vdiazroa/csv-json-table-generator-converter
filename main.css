@@ -5,6 +5,12 @@
   width: 14%;
   margin: 1%;
 }
+.border-red,
+.border-red:hover,
+.border-red:focus {
+  border: 2px solid red;
+}
+
 form {
   margin-bottom: 2rem;
 }
