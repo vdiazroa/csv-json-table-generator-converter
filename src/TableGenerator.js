@@ -168,9 +168,7 @@ export default class TableGenerator {
   }
 
   areNotEquals(arrayOne, arrayTwo) {
-    return arrayOne.reduce((acc, curr, i) => {
-      return Object.is(curr, arrayTwo[i]) ? acc : acc + 1;
-    }, 0);
+    return arrayOne.some((obj, i) => !Object.is(obj, arrayTwo[i]));
   }
 
   newOrder(array, sortBy, orderBy) {
