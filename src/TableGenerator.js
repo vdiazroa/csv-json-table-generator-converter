@@ -31,6 +31,7 @@ export default class TableGenerator {
     this.elements.table.innerHTML = this.parseTable();
     this.tableEvents();
     this.insertCode();
+    this.codeEvents();
   }
 
   dataToObject(data) {
@@ -133,6 +134,9 @@ export default class TableGenerator {
       ".insert-table"
     );
     code.innerText = this.elements.table.innerHTML;
+  }
+
+  codeEvents() {
     this.elements.container
       .querySelector(".copy-to-clipboard")
       .addEventListener("click", e => {
