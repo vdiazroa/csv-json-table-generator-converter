@@ -1,7 +1,4 @@
-
 ---
-
-
 # Table generator widget version
 
 This small project was an idea I had when i was learning js.
@@ -14,35 +11,34 @@ The idea of the project is create html tables and get the html code, from an csv
 I also added the option to save as pdf (experimental version)
 
 to get the design is necessary add bootstrap css
-
 ---
 
 if someone wanna take a look how it works: [Link to github webpage](https://vdiazroa.github.io/table-generator/)
 
-
 ---
+
 Using **Uploadfile Class:**
 usefull to upload csv file and convert them into html tables
 
 using options = { container: "#container-0" } to select the container where will be inserted
+
 ```
 const table1 = new UploadFile({ container: "#container-0" });
 ```
 
 ---
+
 Using **TableFromForm() Class** without any option as argument, this insctance will use the default container (#cointainer-1)
 
 ```
 const table2 = new TableFromForm();
 ```
 
-
 ---
 
 also using **TableFromForm Class, but given data formated as an object**
 
 and using the method "**generateTable**" to show as an example
-
 
 ```
 const options = {
@@ -53,7 +49,7 @@ const options = {
     "Nier: Automata,Platinum Games,2017",
     "Overwatch,Blizzard,2016"
   ],
-  details: { Title: "text", Studio: "text", Year: "number" },
+  titles: ["Title", "Studio", "Year"],
   container: "#container-2"
 };
 
