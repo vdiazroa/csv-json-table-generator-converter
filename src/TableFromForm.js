@@ -132,10 +132,7 @@ export default class TableFromForm extends TableGenerator {
       });
       singleData = singleData.join(",");
 
-      if (
-        singleData.length > 0 &&
-        singleData.length != this.options.titles.length - 1
-      ) {
+      if (singleData.length >= this.options.titles.length) {
         data.push(singleData);
       }
     });
