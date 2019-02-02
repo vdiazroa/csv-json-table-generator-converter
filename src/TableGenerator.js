@@ -42,13 +42,7 @@ export default class TableGenerator {
       for (let i in this.options.detailsKeys) {
         singleItem[this.options.detailsKeys[i]] = element.split(",")[i];
       }
-      // to change the type of the numbers to don't have problem to change the order
-      for (let i of this.options.detailsKeys) {
-        if (this.options.details[i] == "number" && singleItem[i] !== "") {
-          singleItem[i] = parseInt(singleItem[i]);
-        }
-      }
-      // ///////////////////////////////////////////////////////////////////////////
+
       this.collection.push(singleItem);
     });
   }
@@ -166,7 +160,7 @@ export default class TableGenerator {
 
     this.areNotEquals(this.collection, newArray)
       ? (this.collection = newArray)
-      : this.newOrder(this.collection, itemTitle, "descending-order");
+      : this.newOrder(this.collection, itemTitle, "desc-order");
   }
 
   areNotEquals(arrayOne, arrayTwo) {
@@ -177,14 +171,13 @@ export default class TableGenerator {
 
   newOrder(array, sortBy, orderBy) {
     array.sort((a, b) => {
-      let nameA = a[sortBy];
-      let nameB = b[sortBy];
-      if (orderBy === "descending-order") [nameA, nameB] = [nameB, nameA];
-      if (this.options.details[sortBy] === "text") {
-        nameA = nameA.toLowerCase();
-        nameB = nameB.toLowerCase();
-      }
-      return nameA > nameB ? 1 : nameA < nameB ? -1 : 0;
+      let valA = a[sortBy];
+      let valB = b[sortBy];
+      if (orderBy === "desc-order") [valA, valB] = [valB, valA];
+      if (`${valA - valB}` !== "NaN") return valA - valB;
+      valA = valA.toLowerCase();
+      valB = valB.toLowerCase();
+      return valA > valB ? 1 : valA < valB ? -1 : 0;
     });
   }
 }
