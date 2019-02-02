@@ -123,7 +123,10 @@ export default class TableGenerator {
 
     </div>
     <div class="card border-dark mb-3">
-      <div class="card-header"><button class='btn copy-to-clipboard mb-3'>Copy Code to Clipboard</button><h5>HTML Code</h5></div>
+      <div class="card-header">
+        <button class='btn copy-to-clipboard mb-3'>Copy Code to Clipboard</button>
+        <h5>HTML Code</h5>
+      </div>
       <div class="card-body text-dark">
        <pre class="card-text code"></pre>
       </div>

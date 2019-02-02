@@ -152,8 +152,11 @@ export default class TableFromForm extends TableGenerator {
       inputText += `<input type='text' value="${element}" placeholder='input ${index +
         1}' class='title input col form-control' col='${index}'>`;
     });
-    inputText +=
-      '</div><div class="div-green-btn col-3 col-lg-2 mt-1"><button class="addCol btn btn-success">+</button></div></div>';
+    inputText += `</div>
+      <div class="div-green-btn col-3 col-lg-2 mt-1">
+        <button class="addCol btn btn-success">+</button>
+      </div>
+    </div>`;
 
     this.collection.forEach(element => {
       inputText += this.parseRow(element);
@@ -172,9 +175,8 @@ export default class TableFromForm extends TableGenerator {
     for (let i in element) {
       const index = this.options.titles.indexOf(i);
       inputText += `
-        <input type='${this.options.titles[i]}' value='${
-        element[i]
-      }' col='${index}' placeholder='${i || "input " + (index + 1)}'
+        <input type="text" value='${element[i]}' col='${index}' 
+        placeholder='${i || "input " + (index + 1)}'
         class='input col form-control'>`;
     }
     inputText += `</div><div class="col-3 col-lg-2 mt-2">
