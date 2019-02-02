@@ -13,7 +13,7 @@ const options = {
     "Nier: Automata,Platinum Games,2017",
     "Overwatch,Blizzard,2016"
   ],
-  details: { Title: "text", Studio: "text", Year: "number" },
+  titles: ["Title", "Studio", "Year"],
   container: "#container-2"
 };
 
