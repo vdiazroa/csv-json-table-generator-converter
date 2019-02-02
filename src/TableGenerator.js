@@ -103,6 +103,8 @@ export default class TableGenerator {
           this.changeOrder(button.value);
           this.elements.table.innerHTML = this.parseTable();
           this.tableEvents();
+          this.insertCode();
+          this.codeEvents();
         }
       });
   }
