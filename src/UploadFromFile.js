@@ -22,12 +22,9 @@ export default class UploadFile extends TableGenerator {
     };
   }
   formatData(csv) {
-    this.options.details = {};
+    this.options.titles = {};
     this.options.data = csv.target.result.replace(/\r/g, "").split("\n");
-    this.options.detailsKeys = this.options.data.shift().split(",");
-    this.options.detailsKeys.forEach(title => {
-      this.options.details[title] = "text";
-    });
+    this.options.titles = this.options.data.shift().split(",");
   }
   parseHTML() {
     return `<label for="csv">Choose a valid csv file:</label>
