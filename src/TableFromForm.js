@@ -50,7 +50,7 @@ export default class TableFromForm extends TableGenerator {
         const colNumber = title.getAttribute("col");
         this.titleValidator(title, colNumber);
         const col = form.querySelectorAll(`.divRow input[col='${colNumber}']`);
-        this.options.detailsKeys[colNumber] = title.value;
+        this.options.titles[colNumber] = title.value;
         col.forEach(element => {
           element.setAttribute("placeholder", title.value);
         });
@@ -69,8 +69,7 @@ export default class TableFromForm extends TableGenerator {
       const inputContainer = col.querySelector(".inputContainer");
       inputContainer.appendChild(newInput);
     });
-    this.options.details[`input ${colNumber + 1}`] = "text";
-    this.options.detailsKeys.push(`input ${colNumber + 1}`);
+    this.options.titles.push(`input ${colNumber + 1}`);
   }
 
   generateNewInput(colNumber) {
@@ -101,17 +100,23 @@ export default class TableFromForm extends TableGenerator {
   titleValidator(title, colNumber) {
     const titles = this.elements.container.querySelectorAll(".title");
     const titleValues = Array.from(titles).map(title => title.value);
+    const titleInvalids = Array.from(titles).map(title =>
+      title.classList.contains("border-red")
+    );
     titleValues.splice(colNumber, 1);
     const allAdFields = this.elements.container.querySelectorAll(".addField");
     const tableBtn = this.elements.container.querySelector(".generate-table");
-    if (titleValues.includes(title.value)) {
+    if (titleValues.includes(title.value) && title.value !== "") {
       allAdFields.forEach(btn => btn.setAttribute("disabled", true));
       tableBtn.setAttribute("disabled", true);
       title.classList.add("border-red");
-    } else if (tableBtn.hasAttribute("disabled")) {
-      allAdFields.forEach(btn => btn.removeAttribute("disabled"));
-      tableBtn.removeAttribute("disabled");
+    } else if (tableBtn.hasAttribute("disabled") || title.value === "") {
       title.classList.remove("border-red");
+      console.log(titleInvalids);
+      if (!titleInvalids.includes(true)) {
+        allAdFields.forEach(btn => btn.removeAttribute("disabled"));
+        tableBtn.removeAttribute("disabled");
+      }
     }
   }
 
@@ -126,7 +131,7 @@ export default class TableFromForm extends TableGenerator {
 
       if (
         singleData.length > 0 &&
-        singleData.length != this.options.detailsKeys.length - 1
+        singleData.length != this.options.titles.length - 1
       ) {
         data.push(singleData);
       }
@@ -142,8 +147,8 @@ export default class TableFromForm extends TableGenerator {
           <div class="titles row">
             <div class="col-9 col-lg-10 titlesContainer row">`;
 
-    this.options.detailsKeys.forEach(element => {
-      const index = this.options.detailsKeys.indexOf(element);
+    this.options.titles.forEach(element => {
+      const index = this.options.titles.indexOf(element);
       inputText += `<input type='text' value="${element}" placeholder='input ${index +
         1}' class='title input col form-control' col='${index}'>`;
     });
@@ -165,9 +170,9 @@ export default class TableFromForm extends TableGenerator {
     let inputText = `<div class='divRow row'>
                       <div class="col-9 col-lg-10 row inputContainer">`;
     for (let i in element) {
-      const index = this.options.detailsKeys.indexOf(i);
+      const index = this.options.titles.indexOf(i);
       inputText += `
-        <input type='${this.options.details[i]}' value='${
+        <input type='${this.options.titles[i]}' value='${
         element[i]
       }' col='${index}' placeholder='${i || "input " + (index + 1)}'
         class='input col form-control'>`;
@@ -180,7 +185,7 @@ export default class TableFromForm extends TableGenerator {
   }
   addEmptyRow(currentDiv) {
     const emptyCollection = {};
-    this.options.detailsKeys.forEach(input => {
+    this.options.titles.forEach(input => {
       emptyCollection[input] = "";
     });
     const newRow = document.createElement("div");

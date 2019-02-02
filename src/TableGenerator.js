@@ -3,11 +3,10 @@ export default class TableGenerator {
     this.options = {
       container: "#container-1",
       title: "Table Generator",
-      details: { "": "text" },
+      titles: [""],
       data: [""]
     };
     Object.assign(this.options, options);
-    this.options.detailsKeys = Object.keys(this.options.details);
     this.elements = {
       container: document.querySelector(this.options.container)
     };
@@ -26,7 +25,6 @@ export default class TableGenerator {
   }
 
   generateTable() {
-    // this.dataToObject(this.options.data);
     this.elements.table = this.elements.container.querySelector(
       ".insert-table"
     );
@@ -39,10 +37,9 @@ export default class TableGenerator {
     this.collection = [];
     data.forEach(element => {
       const singleItem = {};
-      for (let i in this.options.detailsKeys) {
-        singleItem[this.options.detailsKeys[i]] = element.split(",")[i];
+      for (let i in this.options.titles) {
+        singleItem[this.options.titles[i]] = element.split(",")[i];
       }
-
       this.collection.push(singleItem);
     });
   }
@@ -57,7 +54,7 @@ export default class TableGenerator {
     let table = `<table class="table table-striped table-dark text-center">
     <thead>
       <tr>`;
-    this.options.detailsKeys.forEach(element => {
+    this.options.titles.forEach(element => {
       table += `
         <th>
           <button value="${element}" class='btn btn-secondary w-100'>
@@ -106,7 +103,6 @@ export default class TableGenerator {
           this.elements.table.innerHTML = this.parseTable();
           this.tableEvents();
         }
-        this.insertCode();
       });
   }
   insertCode() {
