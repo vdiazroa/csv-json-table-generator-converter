@@ -35,14 +35,13 @@ export default class TableGenerator {
   }
 
   dataToObject(data) {
-    this.collection = [];
-    data.forEach(element => {
+    this.collection = data.reduce((collection, element) => {
       const singleItem = {};
-      for (let i in this.options.titles) {
-        singleItem[this.options.titles[i]] = element.split(",")[i];
-      }
-      this.collection.push(singleItem);
-    });
+      const items = element.split(",");
+      for (let i in items) singleItem[this.options.titles[i]] = items[i];
+      collection.push(singleItem);
+      return collection;
+    }, []);
   }
 
   collectionToCsv(collection) {
