@@ -176,17 +176,15 @@ export default class TableGenerator {
   }
 
   newOrder(array, sortBy, orderBy) {
-    let order = (a, b) => a > b;
-    if (orderBy === "descending-order") order = (a, b) => a < b;
-
     array.sort((a, b) => {
       let nameA = a[sortBy];
       let nameB = b[sortBy];
+      if (orderBy === "descending-order") [nameA, nameB] = [nameB, nameA];
       if (this.options.details[sortBy] === "text") {
         nameA = nameA.toLowerCase();
         nameB = nameB.toLowerCase();
       }
-      return order(nameA, nameB) ? 1 : order(nameB, nameA) ? -1 : 0;
+      return nameA > nameB ? 1 : nameA < nameB ? -1 : 0;
     });
   }
 }
