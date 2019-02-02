@@ -149,7 +149,7 @@ export default class TableFromForm extends TableGenerator {
 
     this.options.titles.forEach(element => {
       const index = this.options.titles.indexOf(element);
-      inputText += `<input type='text' value=${element}
+      inputText += `<input type='text' value="${element}"
       placeholder='${"input " + (index + 1)}' 
       class='title input col form-control' col='${index}'>`;
     });
