@@ -100,12 +100,12 @@ export default class TableFromForm extends TableGenerator {
   titleValidator(title, colNumber) {
     const titles = this.elements.container.querySelectorAll(".title");
     const titleValues = Array.from(titles).map(title => title.value);
-    const allAdFields = this.elements.container.querySelectorAll(".addField");
+    const allAddFields = this.elements.container.querySelectorAll(".addField");
     const tableBtn = this.elements.container.querySelector(".generate-table");
     titleValues.splice(colNumber, 1);
 
     if (titleValues.includes(title.value) && title.value != "") {
-      allAdFields.forEach(btn => btn.setAttribute("disabled", true));
+      allAddFields.forEach(btn => btn.setAttribute("disabled", true));
       tableBtn.setAttribute("disabled", true);
       titles.forEach(element => {
         if (element.value === title.value) {
@@ -118,7 +118,7 @@ export default class TableFromForm extends TableGenerator {
       if (redBorder.length === 1) redBorder[0].classList.remove("border-red");
     }
     if (!this.elements.container.querySelector(".border-red")) {
-      allAdFields.forEach(btn => btn.removeAttribute("disabled"));
+      allAddFields.forEach(btn => btn.removeAttribute("disabled"));
       tableBtn.removeAttribute("disabled");
     }
   }
@@ -194,8 +194,7 @@ export default class TableFromForm extends TableGenerator {
     this.options.titles.forEach(input => {
       emptyCollection[input] = "";
     });
-    const newRow = document.createElement("div");
-    newRow.innerHTML = this.parseRow(emptyCollection);
-    currentDiv.after(newRow);
+    const newRow = this.parseRow(emptyCollection);
+    currentDiv.insertAdjacentHTML("afterEnd", newRow);
   }
 }
