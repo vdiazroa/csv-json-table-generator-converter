@@ -100,23 +100,26 @@ export default class TableFromForm extends TableGenerator {
   titleValidator(title, colNumber) {
     const titles = this.elements.container.querySelectorAll(".title");
     const titleValues = Array.from(titles).map(title => title.value);
-    const titleInvalids = Array.from(titles).map(title =>
-      title.classList.contains("border-red")
-    );
-    titleValues.splice(colNumber, 1);
     const allAdFields = this.elements.container.querySelectorAll(".addField");
     const tableBtn = this.elements.container.querySelector(".generate-table");
-    if (titleValues.includes(title.value) && title.value !== "") {
+    titleValues.splice(colNumber, 1);
+
+    if (titleValues.includes(title.value) && title.value != "") {
       allAdFields.forEach(btn => btn.setAttribute("disabled", true));
       tableBtn.setAttribute("disabled", true);
-      title.classList.add("border-red");
-    } else if (tableBtn.hasAttribute("disabled") || title.value === "") {
+      titles.forEach(element => {
+        if (element.value === title.value) {
+          element.classList.add("border-red");
+        }
+      });
+    } else if (tableBtn.hasAttribute("disabled")) {
       title.classList.remove("border-red");
-      console.log(titleInvalids);
-      if (!titleInvalids.includes(true)) {
-        allAdFields.forEach(btn => btn.removeAttribute("disabled"));
-        tableBtn.removeAttribute("disabled");
-      }
+      const redBorder = this.elements.container.querySelectorAll(".border-red");
+      if (redBorder.length === 1) redBorder[0].classList.remove("border-red");
+    }
+    if (!this.elements.container.querySelector(".border-red")) {
+      allAdFields.forEach(btn => btn.removeAttribute("disabled"));
+      tableBtn.removeAttribute("disabled");
     }
   }
 
@@ -149,8 +152,9 @@ export default class TableFromForm extends TableGenerator {
 
     this.options.titles.forEach(element => {
       const index = this.options.titles.indexOf(element);
-      inputText += `<input type='text' value="${element}" placeholder='input ${index +
-        1}' class='title input col form-control' col='${index}'>`;
+      inputText += `<input type='text' value=${element}
+      placeholder='${"input " + (index + 1)}' 
+      class='title input col form-control' col='${index}'>`;
     });
     inputText += `</div>
       <div class="div-green-btn col-3 col-lg-2 mt-1">
