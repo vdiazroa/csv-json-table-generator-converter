@@ -43,7 +43,7 @@ export default class TableGenerator {
       return collection;
     }, []);
     this.count = [];
-    this.collection.forEach(() => this.count.push(0));
+    this.options.titles.forEach(() => this.count.push(0));
   }
 
   collectionToCsv(collection) {
@@ -173,9 +173,8 @@ export default class TableGenerator {
       valB = valB.toLowerCase();
       return valA > valB ? 1 : valA < valB ? -1 : 0;
     });
-    if (this.count[index] === 1) {
-      for (let i in this.count) this.count[i] = 0;
-    } else this.count[index] = 1;
+    for (let i in this.count) this.count[i] = 0;
+    this.count[index] = 1;
   }
 
   // changeOrder(itemTitle) {
