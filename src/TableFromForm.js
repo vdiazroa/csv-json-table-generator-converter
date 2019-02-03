@@ -52,7 +52,12 @@ export default class TableFromForm extends TableGenerator {
         const col = form.querySelectorAll(`.divRow input[col='${colNumber}']`);
         this.options.titles[colNumber] = title.value;
         col.forEach(element => {
-          element.setAttribute("placeholder", title.value);
+          title.value === ""
+            ? element.setAttribute(
+                "placeholder",
+                `input ${parseInt(colNumber) + 1}`
+              )
+            : element.setAttribute("placeholder", title.value);
         });
       }
     });
