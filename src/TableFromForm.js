@@ -13,19 +13,21 @@ export default class TableFromForm extends TableGenerator {
   }
   getElements() {
     this.elements.form = this.elements.container.querySelector(".table-form");
+    this.elements.inputs = this.elements.container.querySelector(".inputs");
     this.elements.addCol = this.elements.container.querySelector(".addCol");
     this.elements.titlesContainer = this.elements.container.querySelector(
       ".titlesContainer"
     );
   }
-  registerEvents({ form, container }) {
-    form.addEventListener("click", e => {
+  registerEvents({ form, container, inputs }) {
+    form.addEventListener("submit", e => {
       e.preventDefault();
-      if (e.target.closest(".generate-table")) {
-        e.stopPropagation();
-        this.dataToObject(this.collectData());
-        this.generateTable();
-      } else if (e.target.closest(".addField")) {
+      this.dataToObject(this.collectData());
+      this.generateTable();
+    });
+    inputs.addEventListener("click", e => {
+      e.preventDefault();
+      if (e.target.closest(".addField")) {
         e.stopPropagation();
         this.setRemoveAttributeDisabled();
         const currentDiv = e.target.closest(".divRow");
@@ -43,7 +45,8 @@ export default class TableFromForm extends TableGenerator {
         this.generateCol(colNumber);
       }
     });
-    form.addEventListener("keyup", e => {
+
+    inputs.addEventListener("keyup", e => {
       const title = e.target.closest(".title");
       e.stopPropagation();
       if (title) {
@@ -51,13 +54,10 @@ export default class TableFromForm extends TableGenerator {
         this.titleValidator(title, colNumber);
         const col = form.querySelectorAll(`.divRow input[col='${colNumber}']`);
         this.options.titles[colNumber] = title.value;
-        col.forEach(element => {
+        col.forEach(el => {
           title.value === ""
-            ? element.setAttribute(
-                "placeholder",
-                `input ${parseInt(colNumber) + 1}`
-              )
-            : element.setAttribute("placeholder", title.value);
+            ? el.setAttribute("placeholder", `input ${parseInt(colNumber) + 1}`)
+            : el.setAttribute("placeholder", title.value);
         });
       }
     });
@@ -67,6 +67,7 @@ export default class TableFromForm extends TableGenerator {
     colNumber === 5 && this.elements.addCol.setAttribute("disabled", true);
     const newTitle = this.generateNewInput(colNumber);
     newTitle.classList.add("title");
+    newTitle.setAttribute("required", true);
     this.elements.titlesContainer.appendChild(newTitle);
 
     this.elements.container.querySelectorAll(".divRow").forEach(col => {
@@ -113,9 +114,7 @@ export default class TableFromForm extends TableGenerator {
       allAddFields.forEach(btn => btn.setAttribute("disabled", true));
       tableBtn.setAttribute("disabled", true);
       titles.forEach(element => {
-        if (element.value === title.value) {
-          element.classList.add("border-red");
-        }
+        if (element.value === title.value) element.classList.add("border-red");
       });
     } else if (tableBtn.hasAttribute("disabled")) {
       title.classList.remove("border-red");
@@ -156,7 +155,7 @@ export default class TableFromForm extends TableGenerator {
       const index = this.options.titles.indexOf(element);
       inputText += `<input type='text' value="${element}"
       placeholder='${"input " + (index + 1)}' 
-      class='title input col form-control' col='${index}'>`;
+      class='title input col form-control' col='${index}' required>`;
     });
     inputText += `</div>
       <div class="div-green-btn col-3 col-lg-2 mt-1">
