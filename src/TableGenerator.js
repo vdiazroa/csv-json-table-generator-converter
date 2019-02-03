@@ -169,8 +169,7 @@ export default class TableGenerator {
       if (compare === 1) [valA, valB] = [valB, valA];
       if (`${valA - valB}` !== "NaN") return valA - valB;
 
-      valA = valA.toLowerCase();
-      valB = valB.toLowerCase();
+      [valA, valB] = [valA.toLowerCase(), valB.toLowerCase()];
       return valA > valB ? 1 : valA < valB ? -1 : 0;
     });
     for (let i in this.count) this.count[i] = 0;
