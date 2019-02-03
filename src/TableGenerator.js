@@ -47,11 +47,14 @@ export default class TableGenerator {
     return array;
   }
 
-  collectionToCsv(collection) {
-    let string = Object.keys(collection[0]).join(",");
-    collection.forEach(col => (string += "\n" + Object.values(col).join(",")));
+  collectionToCsv() {
+    let string = Object.keys(this.collection[0]).join(",");
+    this.collection.forEach(
+      col => (string += "\n" + Object.values(col).join(","))
+    );
     return string;
   }
+
   collectionToJSON() {
     let json = this.collection.map(element => {
       for (let key in element) {
@@ -60,8 +63,23 @@ export default class TableGenerator {
       return element;
     });
     json = JSON.stringify(json);
-    console.log(this.collection);
     return json;
+  }
+
+  download(filename, text) {
+    const element = document.createElement("a");
+    element.setAttribute(
+      "href",
+      "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+    );
+    element.setAttribute("download", filename);
+
+    element.style.display = "none";
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
   }
 
   parseTable() {
@@ -157,9 +175,31 @@ export default class TableGenerator {
   codeEvents() {
     this.elements.container
       .querySelector(".copy-to-clipboard")
-      .addEventListener("click", e => {
-        this.copyToClipboard();
-      });
+      .addEventListener(
+        "click",
+        e => {
+          const file = this.collectionToJSON();
+          document.open();
+          document.write(file);
+          this.download("data.json", file);
+        },
+        false
+      );
+    // this.elements.container
+    //   .querySelector(".copy-to-clipboard")
+    //   .addEventListener(
+    //     "click",
+    //     e => {
+    //       const file = this.collectionToCsv();
+    //       this.download("data.csv", file);
+    //     },
+    //     false
+    //   );
+    // this.elements.container
+    //   .querySelector(".copy-to-clipboard")
+    //   .addEventListener("click", e => {
+    //     this.copyToClipboard();
+    //   });
     this.elements.container
       .querySelector(".save-as-pdf")
       .addEventListener("click", e => {
