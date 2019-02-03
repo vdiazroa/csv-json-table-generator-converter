@@ -34,22 +34,36 @@ export default class TableGenerator {
     this.codeEvents();
   }
 
-  dataToObject(data) {
-    this.collection = data.reduce((collection, element) => {
+  dataToObject(data, type) {
+    let condition = a => true;
+    if (type === "JSON") {
+      condition = item => item !== "";
+    }
+    const array = data.reduce((collection, element) => {
       const singleItem = {};
       const items = element.split(",");
-      for (let i in items) singleItem[this.options.titles[i]] = items[i];
+      for (let i in items) {
+        if (condition(items[i])) {
+          singleItem[this.options.titles[i]] = items[i];
+        }
+      }
       collection.push(singleItem);
       return collection;
     }, []);
     this.count = [];
     this.options.titles.forEach(() => this.count.push(0));
+    return array;
   }
 
   collectionToCsv(collection) {
     let string = Object.keys(collection[0]).join(",");
     collection.forEach(col => (string += "\n" + Object.values(col).join(",")));
     return string;
+  }
+  collectionToJSON() {
+    let json = this.dataToObject(this.options.data, "JSON");
+    json = JSON.stringify(json);
+    return json;
   }
 
   parseTable() {
@@ -91,6 +105,7 @@ export default class TableGenerator {
     el.select();
     document.execCommand("copy");
     document.body.removeChild(el);
+    this.collectionToJSON();
     alert("Code copied");
   }
 

@@ -17,7 +17,7 @@ export default class UploadFile extends TableGenerator {
     reader.readAsText(file);
     reader.onload = file => {
       this.formatData(file);
-      this.dataToObject(this.options.data);
+      this.collection = this.dataToObject(this.options.data);
       this.generateTable();
     };
   }

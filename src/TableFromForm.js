@@ -5,7 +5,7 @@ export default class TableFromForm extends TableGenerator {
     this.init();
   }
   init() {
-    this.dataToObject(this.options.data);
+    this.collection = this.dataToObject(this.options.data);
     this.parseForm();
     this.getElements();
     this.registerEvents(this.elements);
@@ -22,7 +22,7 @@ export default class TableFromForm extends TableGenerator {
   registerEvents({ form, container, inputs }) {
     form.addEventListener("submit", e => {
       e.preventDefault();
-      this.dataToObject(this.collectData());
+      this.collection = this.dataToObject(this.collectData());
       this.generateTable();
     });
     inputs.addEventListener("click", e => {
@@ -128,7 +128,7 @@ export default class TableFromForm extends TableGenerator {
   }
 
   collectData() {
-    let data = [];
+    this.options.data = [];
     this.elements.container.querySelectorAll(".divRow").forEach(element => {
       let singleData = [];
       element.querySelectorAll("input").forEach(element => {
@@ -137,10 +137,10 @@ export default class TableFromForm extends TableGenerator {
       singleData = singleData.join(",");
 
       if (singleData.length >= this.options.titles.length) {
-        data.push(singleData);
+        this.options.data.push(singleData);
       }
     });
-    return data;
+    return this.options.data;
   }
   parseForm() {
     let inputText = `
