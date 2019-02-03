@@ -42,6 +42,8 @@ export default class TableGenerator {
       collection.push(singleItem);
       return collection;
     }, []);
+    this.count = [];
+    this.collection.forEach(() => this.count.push(0));
   }
 
   collectionToCsv(collection) {
@@ -158,28 +160,46 @@ export default class TableGenerator {
       });
   }
 
-  changeOrder(itemTitle) {
-    const newArray = [...this.collection];
-    this.newOrder(newArray, itemTitle);
-
-    this.areNotEquals(this.collection, newArray)
-      ? (this.collection = newArray)
-      : this.newOrder(this.collection, itemTitle, "desc-order");
-  }
-
-  areNotEquals(arrayOne, arrayTwo) {
-    return arrayOne.some((obj, i) => !Object.is(obj, arrayTwo[i]));
-  }
-
-  newOrder(array, sortBy, orderBy) {
-    array.sort((a, b) => {
+  changeOrder(sortBy) {
+    const index = this.options.titles.indexOf(sortBy);
+    this.collection.sort((a, b) => {
       let valA = a[sortBy];
       let valB = b[sortBy];
-      if (orderBy === "desc-order") [valA, valB] = [valB, valA];
+
+      if (this.count[index] === 1) [valA, valB] = [valB, valA];
       if (`${valA - valB}` !== "NaN") return valA - valB;
+
       valA = valA.toLowerCase();
       valB = valB.toLowerCase();
       return valA > valB ? 1 : valA < valB ? -1 : 0;
     });
+    if (this.count[index] === 1) {
+      for (let i in this.count) this.count[i] = 0;
+    } else this.count[index] = 1;
   }
+
+  // changeOrder(itemTitle) {
+  //   const newArray = [...this.collection];
+  //   this.newOrder(newArray, itemTitle);
+
+  //   this.areNotEquals(this.collection, newArray)
+  //     ? (this.collection = newArray)
+  //     : this.newOrder(this.collection, itemTitle, "desc-order");
+  // }
+
+  // areNotEquals(arrayOne, arrayTwo) {
+  //   return arrayOne.some((obj, i) => !Object.is(obj, arrayTwo[i]));
+  // }
+
+  // newOrder(array, sortBy, orderBy) {
+  //   array.sort((a, b) => {
+  //     let valA = a[sortBy];
+  //     let valB = b[sortBy];
+  //     if (orderBy === "desc-order") [valA, valB] = [valB, valA];
+  //     if (`${valA - valB}` !== "NaN") return valA - valB;
+  //     valA = valA.toLowerCase();
+  //     valB = valB.toLowerCase();
+  //     return valA > valB ? 1 : valA < valB ? -1 : 0;
+  //   });
+  // }
 }
