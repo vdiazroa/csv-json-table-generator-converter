@@ -34,19 +34,11 @@ export default class TableGenerator {
     this.codeEvents();
   }
 
-  dataToObject(data, type) {
-    let condition = a => true;
-    if (type === "JSON") {
-      condition = item => item !== "";
-    }
+  dataToObject(data) {
     const array = data.reduce((collection, element) => {
       const singleItem = {};
       const items = element.split(",");
-      for (let i in items) {
-        if (condition(items[i])) {
-          singleItem[this.options.titles[i]] = items[i];
-        }
-      }
+      for (let i in items) singleItem[this.options.titles[i]] = items[i];
       collection.push(singleItem);
       return collection;
     }, []);
@@ -61,8 +53,14 @@ export default class TableGenerator {
     return string;
   }
   collectionToJSON() {
-    let json = this.dataToObject(this.options.data, "JSON");
+    let json = this.collection.map(element => {
+      for (let key in element) {
+        if (element[key] === "") delete element[key];
+      }
+      return element;
+    });
     json = JSON.stringify(json);
+    console.log(this.collection);
     return json;
   }
 
@@ -105,7 +103,6 @@ export default class TableGenerator {
     el.select();
     document.execCommand("copy");
     document.body.removeChild(el);
-    this.collectionToJSON();
     alert("Code copied");
   }
 
