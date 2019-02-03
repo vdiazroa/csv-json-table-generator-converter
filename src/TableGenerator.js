@@ -162,11 +162,11 @@ export default class TableGenerator {
 
   changeOrder(sortBy) {
     const index = this.options.titles.indexOf(sortBy);
+    const compare = this.count[index];
     this.collection.sort((a, b) => {
-      let valA = a[sortBy];
-      let valB = b[sortBy];
+      let [valA, valB] = [a[sortBy], b[sortBy]];
 
-      if (this.count[index] === 1) [valA, valB] = [valB, valA];
+      if (compare === 1) [valA, valB] = [valB, valA];
       if (`${valA - valB}` !== "NaN") return valA - valB;
 
       valA = valA.toLowerCase();
@@ -174,7 +174,7 @@ export default class TableGenerator {
       return valA > valB ? 1 : valA < valB ? -1 : 0;
     });
     for (let i in this.count) this.count[i] = 0;
-    this.count[index] = 1;
+    if (compare === 0) this.count[index] = 1;
   }
 
   // changeOrder(itemTitle) {
