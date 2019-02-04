@@ -190,14 +190,12 @@ export default class TableGenerator {
         const json = this.collectionToJSON();
         window.open().document.write(`<pre>${json}</pre>`);
       });
-    this.elements.container.querySelector(".csv-file").addEventListener(
-      "click",
-      e => {
+    this.elements.container
+      .querySelector(".csv-file")
+      .addEventListener("click", e => {
         const file = this.collectionToCsv();
         this.download("data.csv", file);
-      },
-      false
-    );
+      });
     this.elements.container
       .querySelector(".copy-to-clipboard")
       .addEventListener("click", e => {
