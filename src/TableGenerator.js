@@ -148,7 +148,7 @@ export default class TableGenerator {
   insertCode() {
     this.elements.container.querySelector(".insert-code").innerHTML = `
     <span class="justify-content-between d-flex">
-      <span class="btn-group mr-5" role="group" aria-label="Basic example">
+      <span class="btn-group mr-5" role="group" style="height:40px   ">
         <button type="button" class="btn btn-secondary csv-file">CSV File</button>
         <button type="button" class="btn btn-secondary json-data">JSON Data</button>
       </span>
@@ -156,22 +156,25 @@ export default class TableGenerator {
       <span class="text-right border">
         <span class="btn-group btn-group-toggle mr-3 table-theme data-toggle="buttons">
           <label class="btn btn-dark active dark-theme">
-            <input type="radio" name="options" id="dark-theme" autocomplete="off" checked> Dark Theme
+            <input type="radio" name="options" id="dark-theme" autocomplete="off" ${this
+              .theme === "dark-theme" && "checked"}> Dark Theme
           </label>
           <label class="btn btn-light light-theme">
-            <input type="radio" name="options" id="light-theme" autocomplete="off"> Light Theme
+            <input type="radio" name="options" id="light-theme" autocomplete="off"${this
+              .theme === "light-theme" && "checked"}> Light Theme
           </label>
         </span>
 
         <span class="text-left pdfOrientation">
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" checked>
-            <label class="custom-control-label" for="l">landscape</label>
-          </div>
-          <div class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="p" name="pdf-orientation" class="custom-control-input">
-            <label class="custom-control-label" for="p">portrait</label>
-          </div>
+          <span class="custom-control custom-radio custom-control-inline">
+            
+            <label class="custom-control-label mr-3" for="l">
+              <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" checked>landscape
+            </label>
+            <label class="custom-control-label ml-3" for="p">
+            <input type="radio" id="p" name="pdf-orientation" class="custom-control-input">portrait</label>
+            
+          </span>
         </span>
         <button class="btn save-as-pdf">Save as PDF</button>
       </span>
@@ -225,7 +228,6 @@ export default class TableGenerator {
     this.elements.container
       .querySelector(".table-theme")
       .addEventListener("change", e => {
-        console.log(e);
         this.theme = e.target.id;
         this.tableTheme();
       });
@@ -241,17 +243,13 @@ export default class TableGenerator {
       table.classList.add("table-dark");
       lightTheme.classList.remove("active");
       darkTheme.classList.add("active");
-      tableBns.forEach(btn => {
-        btn.classList.add("btn-secondary");
-      });
+      tableBns.forEach(btn => btn.classList.add("btn-secondary"));
     } else if (this.theme === "light-theme") {
       table.classList.remove("table-dark");
       table.classList.add("table-light");
       lightTheme.classList.add("active");
       darkTheme.classList.remove("active");
-      tableBns.forEach(btn => {
-        btn.classList.remove("btn-secondary");
-      });
+      tableBns.forEach(btn => btn.classList.remove("btn-secondary"));
     }
   }
 
