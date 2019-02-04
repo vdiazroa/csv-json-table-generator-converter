@@ -14,7 +14,9 @@ export default class TableGenerator {
   }
 
   generatePDF() {
-    html2canvas(this.elements.container.querySelector("table"), {
+    const table = this.elements.container.querySelector("table");
+    if (this.orientation === "p") table.setAttribute("style", "width:730px");
+    html2canvas(table, {
       onrendered: canvas => {
         const imgData = canvas.toDataURL();
         const doc = new jsPDF(this.orientation, "px", "a4");
@@ -22,6 +24,7 @@ export default class TableGenerator {
         doc.save("table.pdf");
       }
     });
+    table.removeAttribute("style");
   }
 
   generateTable() {
@@ -209,9 +212,6 @@ export default class TableGenerator {
       .querySelector(".pdfOrientation")
       .addEventListener("change", e => {
         this.orientation = e.target.id;
-        const table = this.elements.container.querySelector("table");
-        if (e.target.id === "p") table.setAttribute("style", "width:730px");
-        else table.removeAttribute("style");
       });
   }
 
