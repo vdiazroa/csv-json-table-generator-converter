@@ -62,7 +62,7 @@ export default class TableGenerator {
       }
       return element;
     });
-    json = JSON.stringify(json);
+    json = JSON.stringify(json, null, 1);
     return json;
   }
 
@@ -139,23 +139,31 @@ export default class TableGenerator {
         }
       });
   }
+
   insertCode() {
     this.elements.container.querySelector(".insert-code").innerHTML = `
-    <div class="text-right mb-4">
-      <span class="text-left pdfOrientation">
-        <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" checked>
-          <label class="custom-control-label" for="l">landscape</label>
-        </div>
-        <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="p" name="pdf-orientation" class="custom-control-input">
-          <label class="custom-control-label" for="p">portrait</label>
-        </div>
+    <span class="justify-content-between d-flex">
+      <span class="btn-group mr-5" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary csv-file">CSV File</button>
+        <button type="button" class="btn btn-secondary json-data">JSON Data</button>
       </span>
-      <button class="btn save-as-pdf">Save as PDF</button>
 
-    </div>
-    <div class="card border-dark mb-3">
+      <span class="text-right">
+        <span class="text-left pdfOrientation">
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" checked>
+            <label class="custom-control-label" for="l">landscape</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="p" name="pdf-orientation" class="custom-control-input">
+            <label class="custom-control-label" for="p">portrait</label>
+          </div>
+        </span>
+        <button class="btn save-as-pdf">Save as PDF</button>
+      </span>
+    </span>
+
+    <span class="card border-dark mb-3 mt-4">
       <div class="card-header">
         <button class='btn copy-to-clipboard mb-3'>Copy Code to Clipboard</button>
         <h5>HTML Code</h5>
@@ -163,7 +171,7 @@ export default class TableGenerator {
       <div class="card-body text-dark">
        <pre class="card-text code"></pre>
       </div>
-    </div>
+    </span>
     `;
     const code = this.elements.container.querySelector(".code");
     this.elements.table = this.elements.container.querySelector(
@@ -174,32 +182,24 @@ export default class TableGenerator {
 
   codeEvents() {
     this.elements.container
+      .querySelector(".json-data")
+      .addEventListener("click", e => {
+        const json = this.collectionToJSON();
+        window.open().document.write(`<pre>${json}</pre>`);
+      });
+    this.elements.container.querySelector(".csv-file").addEventListener(
+      "click",
+      e => {
+        const file = this.collectionToCsv();
+        this.download("data.csv", file);
+      },
+      false
+    );
+    this.elements.container
       .querySelector(".copy-to-clipboard")
-      .addEventListener(
-        "click",
-        e => {
-          const file = this.collectionToJSON();
-          document.open();
-          document.write(file);
-          this.download("data.json", file);
-        },
-        false
-      );
-    // this.elements.container
-    //   .querySelector(".copy-to-clipboard")
-    //   .addEventListener(
-    //     "click",
-    //     e => {
-    //       const file = this.collectionToCsv();
-    //       this.download("data.csv", file);
-    //     },
-    //     false
-    //   );
-    // this.elements.container
-    //   .querySelector(".copy-to-clipboard")
-    //   .addEventListener("click", e => {
-    //     this.copyToClipboard();
-    //   });
+      .addEventListener("click", e => {
+        this.copyToClipboard();
+      });
     this.elements.container
       .querySelector(".save-as-pdf")
       .addEventListener("click", e => {
