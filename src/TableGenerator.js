@@ -165,15 +165,14 @@ export default class TableGenerator {
           </label>
         </span>
 
-        <span class="text-left pdfOrientation">
+        <span class="text-left pdfOrientation custom-control-inline">
           <span class="custom-control custom-radio custom-control-inline">
-            
-            <label class="custom-control-label mr-3" for="l">
-              <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" checked>landscape
-            </label>
-            <label class="custom-control-label ml-3" for="p">
-            <input type="radio" id="p" name="pdf-orientation" class="custom-control-input">portrait</label>
-            
+            <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" checked>
+            <label class="custom-control-label" for="l">landscape</label>
+          </span>
+          <span class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="p" name="pdf-orientation" class="custom-control-input">
+            <label class="custom-control-label" for="p">portrait</label>
           </span>
         </span>
         <button class="btn save-as-pdf">Save as PDF</button>
