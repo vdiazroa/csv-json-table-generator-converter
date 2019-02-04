@@ -11,6 +11,7 @@ export default class TableGenerator {
       container: document.querySelector(this.options.container)
     };
     this.orientation = "l";
+    this.theme = "dark-theme";
   }
 
   generatePDF() {
@@ -139,6 +140,7 @@ export default class TableGenerator {
           this.tableEvents();
           this.insertCode();
           this.codeEvents();
+          this.tableTheme();
         }
       });
   }
@@ -151,7 +153,16 @@ export default class TableGenerator {
         <button type="button" class="btn btn-secondary json-data">JSON Data</button>
       </span>
 
-      <span class="text-right">
+      <span class="text-right border">
+        <span class="btn-group btn-group-toggle mr-3 table-theme data-toggle="buttons">
+          <label class="btn btn-dark active dark-theme">
+            <input type="radio" name="options" id="dark-theme" autocomplete="off" checked> Dark Theme
+          </label>
+          <label class="btn btn-light light-theme">
+            <input type="radio" name="options" id="light-theme" autocomplete="off"> Light Theme
+          </label>
+        </span>
+
         <span class="text-left pdfOrientation">
           <div class="custom-control custom-radio custom-control-inline">
             <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" checked>
@@ -211,6 +222,37 @@ export default class TableGenerator {
       .addEventListener("change", e => {
         this.orientation = e.target.id;
       });
+    this.elements.container
+      .querySelector(".table-theme")
+      .addEventListener("change", e => {
+        console.log(e);
+        this.theme = e.target.id;
+        this.tableTheme();
+      });
+  }
+
+  tableTheme() {
+    const table = this.elements.container.querySelector(".table");
+    const darkTheme = this.elements.container.querySelector(".dark-theme");
+    const lightTheme = this.elements.container.querySelector(".light-theme");
+    const tableBns = this.elements.container.querySelectorAll("table button");
+    if (this.theme === "dark-theme") {
+      table.classList.remove("table-light");
+      table.classList.add("table-dark");
+      lightTheme.classList.remove("active");
+      darkTheme.classList.add("active");
+      tableBns.forEach(btn => {
+        btn.classList.add("btn-secondary");
+      });
+    } else if (this.theme === "light-theme") {
+      table.classList.remove("table-dark");
+      table.classList.add("table-light");
+      lightTheme.classList.add("active");
+      darkTheme.classList.remove("active");
+      tableBns.forEach(btn => {
+        btn.classList.remove("btn-secondary");
+      });
+    }
   }
 
   changeOrder(count, sortBy) {
