@@ -168,7 +168,7 @@ export default class TableFromForm extends TableGenerator {
     });
     inputText += `
       </div>
-      <button class='btn generate-table'>Generate Table</button>
+      <button class='btn generate-table'>Update Data</button>
       </form>
       <div class='insert-table m-5'></div>
       <div class="insert-code container"></div>`;
