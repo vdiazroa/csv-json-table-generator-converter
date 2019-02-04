@@ -24,7 +24,7 @@ table {
 table,
 td,
 th {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   text-align: center;
 }
 td,
@@ -38,7 +38,6 @@ body {
   margin-top: 2rem;
 }
 th button {
-  background-color: rgb(177, 117, 117);
   width: 100%;
 }
 th button:hover {
