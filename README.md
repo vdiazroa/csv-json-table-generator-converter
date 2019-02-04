@@ -57,3 +57,5 @@ const table3 = new TableFromForm(options);
 table3.generateTable();
 
 ```
+
+--
