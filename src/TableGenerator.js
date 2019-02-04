@@ -42,8 +42,8 @@ export default class TableGenerator {
       collection.push(singleItem);
       return collection;
     }, []);
-    this.count = [];
-    this.options.titles.forEach(() => this.count.push(0));
+    this.count = -1;
+    // this.options.titles.forEach(() => this.count.push(0));
     return array;
   }
 
@@ -131,7 +131,7 @@ export default class TableGenerator {
         const button = e.target.closest("button");
         e.stopPropagation();
         if (button) {
-          this.changeOrder(button.value);
+          this.count = this.changeOrder(this.count, button.value);
           this.elements.table.innerHTML = this.parseTable();
           this.tableEvents();
           this.insertCode();
@@ -215,20 +215,18 @@ export default class TableGenerator {
       });
   }
 
-  changeOrder(sortBy) {
+  changeOrder(count, sortBy) {
     const index = this.options.titles.indexOf(sortBy);
-    const compare = this.count[index];
     this.collection.sort((a, b) => {
-      let [valA, valB] = [a[sortBy], b[sortBy]];
+      [a, b] = [a[sortBy], b[sortBy]];
+      if (count === index) [a, b] = [b, a];
 
-      if (compare === 1) [valA, valB] = [valB, valA];
-      if (`${valA - valB}` !== "NaN") return valA - valB;
+      if (`${a - b}` !== "NaN") return a - b;
 
-      [valA, valB] = [valA.toLowerCase(), valB.toLowerCase()];
-      return valA > valB ? 1 : valA < valB ? -1 : 0;
+      [a, b] = [a.toLowerCase(), b.toLowerCase()];
+      return a > b ? 1 : a < b ? -1 : 0;
     });
-    for (let i in this.count) this.count[i] = 0;
-    if (compare === 0) this.count[index] = 1;
+    return count === index ? -1 : index;
   }
 
   // changeOrder(itemTitle) {
