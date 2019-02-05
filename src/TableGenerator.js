@@ -160,18 +160,20 @@ export default class TableGenerator {
               .theme === "dark-theme" && "checked"}> Dark Theme
           </label>
           <label class="btn btn-light light-theme">
-            <input type="radio" name="options" id="light-theme" autocomplete="off"${this
+            <input type="radio" name="options" id="light-theme" autocomplete="off" ${this
               .theme === "light-theme" && "checked"}> Light Theme
           </label>
         </span>
 
-        <span class="text-left pdfOrientation custom-control-inline">
+        <span class="text-left pdfOrientation custom-control-inlinedata-toggle="or"">
           <span class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" checked>
+            <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" ${this
+              .orientation === "l" && "checked"}>
             <label class="custom-control-label" for="l">landscape</label>
           </span>
           <span class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="p" name="pdf-orientation" class="custom-control-input">
+            <input type="radio" id="p" name="pdf-orientation" class="custom-control-input ${this
+              .orientation === "p" && "checked"}">
             <label class="custom-control-label" for="p">portrait</label>
           </span>
         </span>
