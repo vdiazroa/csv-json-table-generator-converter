@@ -7,7 +7,7 @@ export default class UploadFile extends TableGenerator {
   init() {
     this.elements.container.innerHTML = this.parseHTML();
     this.elements.container
-      .querySelector("#csv")
+      .querySelector(".form-control-file")
       .addEventListener("change", e => {
         this.generateTableFromFile(e.target.files[0]);
       });
@@ -28,7 +28,8 @@ export default class UploadFile extends TableGenerator {
   }
   parseHTML() {
     return `<label for="csv">Choose a valid csv file:</label>
-            <input type="file" id="csv" name="csv" accept=".csv">
+            <input type="file" id="csv" name="csv" accept=".csv" class="form-control-file mb-4">
+            <div class='insert-filters m-5'></div>
             <div class='insert-table container'></div>
             <div class="insert-code container"></div>`;
   }
