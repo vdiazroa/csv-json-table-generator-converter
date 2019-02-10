@@ -13,15 +13,28 @@ export default class TableGenerator {
     this.orientation = "l";
     this.theme = "dark-theme";
 
+    // this.conditions = {
+    //   equals: (a, b) => a == b,
+    //   isNot: (a, b) => a != b,
+    //   greaterThan: (a, b) => a > b,
+    //   greaterOrEqualThan: (a, b) => a >= b,
+    //   lessThan: (a, b) => a < b,
+    //   lessOrEqualThan: (a, b) => a <= b,
+    //   includes: (a, b) => a.includes(b),
+    //   startsWith: (a, b) => a.startsWith(b),
+    //   endsWith: (a, b) => a.endsWith(b)
+    // };
+
     this.conditions = {
-      equals: (a, b) => a == b,
-      greaterThan: (a, b) => a > b,
-      greaterOrEqualThan: (a, b) => a >= b,
-      lessThan: (a, b) => a < b,
-      lessOrEqualThan: (a, b) => a <= b,
+      "=": (a, b) => a == b,
+      "!=": (a, b) => a != b,
+      ">": (a, b) => a > b,
+      "> or =": (a, b) => a >= b,
+      "<": (a, b) => a < b,
+      "< or =": (a, b) => a <= b,
       includes: (a, b) => a.includes(b),
-      startsWith: (a, b) => a.startsWith(b),
-      endsWith: (a, b) => a.endsWith(b)
+      "starts with": (a, b) => a.startsWith(b),
+      "ends with": (a, b) => a.endsWith(b)
     };
     this.filters = [];
     this.filtersCount = 0;
