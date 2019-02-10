@@ -35,6 +35,7 @@ export default class UploadFile extends TableGenerator {
             <input type="file" id="csv" name="csv" accept=".csv" class="form-control-file mb-4">
             <div class='insert-filters m-3'></div>
             <div class='insert-table container'></div>
+            <div class='insert-table-btns container'></div>
             <div class="insert-code container"></div>`;
   }
 }

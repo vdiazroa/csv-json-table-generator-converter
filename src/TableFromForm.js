@@ -180,6 +180,7 @@ export default class TableFromForm extends TableGenerator {
       </form>
       <div class='insert-filters m-3'></div>
       <div class='insert-table m-3'></div>
+      <div class="insert-table-btns container"></div>
       <div class="insert-code container"></div>`;
     this.elements.container.innerHTML = inputText;
   }
