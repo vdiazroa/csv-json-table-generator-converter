@@ -29,7 +29,7 @@ export default class UploadFile extends TableGenerator {
   parseHTML() {
     return `<label for="csv">Choose a valid csv file:</label>
             <input type="file" id="csv" name="csv" accept=".csv" class="form-control-file mb-4">
-            <div class='insert-filters m-5'></div>
+            <div class='insert-filters m-3'></div>
             <div class='insert-table container'></div>
             <div class="insert-code container"></div>`;
   }
