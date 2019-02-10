@@ -152,7 +152,7 @@ export default class TableFromForm extends TableGenerator {
   }
   parseForm() {
     let inputText = `
-      <form action="" class="table-form form ml-5"><h1>${
+      <form action="" class="table-form form ml-3"><h1>${
         this.options.title
       }</h1>
         <div class="inputs">
@@ -178,8 +178,8 @@ export default class TableFromForm extends TableGenerator {
       </div>
       <button class='btn generate-table'>Update Data</button>
       </form>
-      <div class='insert-filters m-5'></div>
-      <div class='insert-table m-5'></div>
+      <div class='insert-filters m-3'></div>
+      <div class='insert-table m-3'></div>
       <div class="insert-code container"></div>`;
     this.elements.container.innerHTML = inputText;
   }
