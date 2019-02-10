@@ -85,9 +85,14 @@ export default class TableGenerator {
         const condition = this.conditions[filter.condition];
         let a = data[filter.title];
         let b = filter.value;
-        return (a - b).toString() !== "NaN"
-          ? condition(Number(a), Number(b))
-          : condition(a.toLowerCase(), b.toLowerCase());
+        if (
+          (a - b).toString() === "NaN" ||
+          filter.condition === "includes" ||
+          filter.condition === "starts with" ||
+          filter.condition === "ends with"
+        ) {
+          return condition(a.toLowerCase(), b.toLowerCase());
+        } else condition(Number(a), Number(b));
       });
     }, this.collection);
   }
