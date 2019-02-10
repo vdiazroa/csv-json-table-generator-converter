@@ -10,6 +10,10 @@ export default class TableFromForm extends TableGenerator {
     this.getElements();
     this.registerEvents(this.elements);
     this.setRemoveAttributeDisabled();
+    this.elements.container.querySelector(
+      ".insert-filters"
+    ).innerHTML = this.parseFilters();
+    this.filterEvents();
   }
   getElements() {
     this.elements.form = this.elements.container.querySelector(".table-form");
@@ -23,6 +27,10 @@ export default class TableFromForm extends TableGenerator {
     form.addEventListener("submit", e => {
       e.preventDefault();
       this.collection = this.dataToObject(this.collectData());
+      this.elements.container.querySelector(
+        ".insert-filters"
+      ).innerHTML = this.parseFilters();
+      this.filterEvents();
       this.generateTable();
     });
     inputs.addEventListener("click", e => {
@@ -144,7 +152,7 @@ export default class TableFromForm extends TableGenerator {
   }
   parseForm() {
     let inputText = `
-      <form action="" class="table-form form ml-5"><h1>${
+      <form action="" class="table-form form ml-3"><h1>${
         this.options.title
       }</h1>
         <div class="inputs">
@@ -170,7 +178,9 @@ export default class TableFromForm extends TableGenerator {
       </div>
       <button class='btn generate-table'>Update Data</button>
       </form>
-      <div class='insert-table m-5'></div>
+      <div class='insert-filters m-3'></div>
+      <div class='insert-table m-3'></div>
+      <div class="insert-table-btns container"></div>
       <div class="insert-code container"></div>`;
     this.elements.container.innerHTML = inputText;
   }

@@ -12,6 +12,32 @@ export default class TableGenerator {
     };
     this.orientation = "l";
     this.theme = "dark-theme";
+
+    // this.conditions = {
+    //   equals: (a, b) => a == b,
+    //   isNot: (a, b) => a != b,
+    //   greaterThan: (a, b) => a > b,
+    //   greaterOrEqualThan: (a, b) => a >= b,
+    //   lessThan: (a, b) => a < b,
+    //   lessOrEqualThan: (a, b) => a <= b,
+    //   includes: (a, b) => a.includes(b),
+    //   startsWith: (a, b) => a.startsWith(b),
+    //   endsWith: (a, b) => a.endsWith(b)
+    // };
+
+    this.conditions = {
+      "=": (a, b) => a == b,
+      "!=": (a, b) => a != b,
+      ">": (a, b) => a > b,
+      "> or =": (a, b) => a >= b,
+      "<": (a, b) => a < b,
+      "< or =": (a, b) => a <= b,
+      includes: (a, b) => a.includes(b),
+      "starts with": (a, b) => a.startsWith(b),
+      "ends with": (a, b) => a.endsWith(b)
+    };
+    this.filters = [];
+    this.filtersCount = 0;
   }
 
   generatePDF() {
@@ -32,10 +58,12 @@ export default class TableGenerator {
     this.elements.table = this.elements.container.querySelector(
       ".insert-table"
     );
-    this.elements.table.innerHTML = this.parseTable();
+    this.elements.table.innerHTML = this.parseTable(this.addFilters());
     this.tableEvents();
+    this.insertTableBtns();
+    this.tableBtnsEvents();
+    this.tableTheme();
     this.insertCode();
-    this.codeEvents();
   }
 
   dataToObject(data) {
@@ -51,16 +79,29 @@ export default class TableGenerator {
     return array;
   }
 
+  addFilters() {
+    return this.filters.reduce((acc, filter) => {
+      return acc.filter(data => {
+        const condition = this.conditions[filter.condition];
+        let a = data[filter.title];
+        let b = filter.value;
+        return (a - b).toString() !== "NaN"
+          ? condition(Number(a), Number(b))
+          : condition(a.toLowerCase(), b.toLowerCase());
+      });
+    }, this.collection);
+  }
+
   collectionToCsv() {
-    let string = Object.keys(this.collection[0]).join(",");
-    this.collection.forEach(
+    let string = Object.keys(this.addFilters()[0]).join(",");
+    this.addFilters().forEach(
       col => (string += "\n" + Object.values(col).join(","))
     );
     return string;
   }
 
   collectionToJSON() {
-    let json = this.collection.map(element => {
+    let json = this.addFilters().map(element => {
       for (let key in element) {
         if (element[key] === "") delete element[key];
       }
@@ -86,7 +127,49 @@ export default class TableGenerator {
     document.body.removeChild(element);
   }
 
-  parseTable() {
+  parseFilters() {
+    const titles = this.options.titles.reduce((string, title) => {
+      return string + `<option value="${title}">${title}</option>`;
+    }, "");
+    let conditions = "";
+    for (let i in this.conditions) {
+      conditions += `<option value="${i}">${i}</option>`;
+    }
+    return `
+    <form class="form-inline add-filters">
+      <div class="select-wrapper">
+        <select class="form-control mr-2" id="title-filter" data-label="wave">
+        ${titles}
+        </select>
+      </div>
+      <div class="select-wrapper">
+        <select class="form-control mr-2" id="condition-filter" data-label="wave">
+        ${conditions}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="filter-value" class="sr-only">value</label>
+        <input type="text" class="form-control mr-2" id="filter-value" placeholder="value">
+      </div>
+      <button class="btn btn-primary addFilter">add Filter</button>
+    </form>
+    <div class="filters text-center row"><div>`;
+  }
+
+  addFilterStatus(filter) {
+    return `
+    <div class="col-3 filter text-dark" number=${filter.count}>
+      <div class="rounded p-0">
+        <div class="bg-warning">
+          <strong class="text-dark">Filter: ${filter.title}</strong>
+          <button class="close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="bg-light">${filter.condition} "${filter.value}"</div>
+      </div>
+    </div>`;
+  }
+
+  parseTable(collection) {
     let table = `<table class="table table-striped table-dark text-center">
     <thead>
       <tr>`;
@@ -102,7 +185,7 @@ export default class TableGenerator {
       </tr>
     </thead>
     <tbody>`;
-    this.collection.forEach(element => {
+    collection.forEach(element => {
       table += `
       <tr>`;
       for (let i in element) {
@@ -136,52 +219,107 @@ export default class TableGenerator {
         e.stopPropagation();
         if (button) {
           this.count = this.changeOrder(this.count, button.value);
-          this.elements.table.innerHTML = this.parseTable();
-          this.tableEvents();
-          this.insertCode();
-          this.codeEvents();
-          this.tableTheme();
+          this.elements.table.innerHTML = this.parseTable(this.addFilters());
+          this.generateTable();
         }
       });
   }
 
-  insertCode() {
-    this.elements.container.querySelector(".insert-code").innerHTML = `
-    <span class="justify-content-between d-flex">
-      <span class="btn-group mr-5" role="group" style="height:40px   ">
-        <button type="button" class="btn btn-secondary csv-file">CSV File</button>
-        <button type="button" class="btn btn-secondary json-data">JSON Data</button>
-      </span>
+  filterEvents() {
+    this.elements.container
+      .querySelector(".add-filters")
+      .addEventListener("submit", e => {
+        e.preventDefault();
+        if (e.target["filter-value"].value) {
+          const filter = {
+            title: e.target["title-filter"].value,
+            condition: e.target["condition-filter"].value,
+            value: e.target["filter-value"].value,
+            count: this.filtersCount
+          };
+          this.elements.container.querySelector(
+            ".filters"
+          ).innerHTML += this.addFilterStatus(filter);
+          this.filters.push(filter);
+          this.filtersCount++;
+          const filtersQ = this.elements.container.querySelectorAll(".filter");
+          if (filtersQ.length === 4)
+            this.elements.container
+              .querySelector(".addFilter")
+              .setAttribute("disabled", true);
 
-      <span class="text-right border">
-        <span class="btn-group btn-group-toggle mr-3 table-theme data-toggle="buttons">
-          <label class="btn btn-dark active dark-theme">
-            <input type="radio" name="options" id="dark-theme" autocomplete="off" ${this
-              .theme === "dark-theme" && "checked"}> Dark Theme
-          </label>
-          <label class="btn btn-light light-theme">
-            <input type="radio" name="options" id="light-theme" autocomplete="off" ${this
-              .theme === "light-theme" && "checked"}> Light Theme
-          </label>
-        </span>
+          this.elements.table.innerHTML = this.parseTable(this.addFilters());
+          this.generateTable();
+        }
+      });
 
-        <span class="text-left pdfOrientation custom-control-inlinedata-toggle="or"">
-          <span class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" ${this
-              .orientation === "l" && "checked"}>
-            <label class="custom-control-label" for="l">landscape</label>
-          </span>
-          <span class="custom-control custom-radio custom-control-inline">
-            <input type="radio" id="p" name="pdf-orientation" class="custom-control-input ${this
-              .orientation === "p" && "checked"}">
-            <label class="custom-control-label" for="p">portrait</label>
-          </span>
-        </span>
-        <button class="btn save-as-pdf">Save as PDF</button>
-      </span>
+    this.elements.container
+      .querySelector(".filters")
+      .addEventListener("click", e => {
+        e.preventDefault();
+        if (e.target.closest(".close")) {
+          e.stopPropagation();
+          const filterDiv = e.target.closest(".filter");
+          e.stopPropagation();
+          const counter = filterDiv.getAttribute("number");
+
+          const toDelete = this.filters.find(elem => elem.count == counter);
+          const index = this.filters.indexOf(toDelete);
+          this.filters.splice(index, 1);
+          filterDiv.remove();
+
+          this.elements.table.innerHTML = this.parseTable(this.addFilters());
+          this.generateTable();
+          const filtersQ = this.elements.container.querySelectorAll(".filter");
+          if (filtersQ.length === 3)
+            this.elements.container
+              .querySelector(".addFilter")
+              .removeAttribute("disabled");
+        }
+      });
+  }
+  insertTableBtns() {
+    this.elements.container.querySelector(
+      ".insert-table-btns"
+    ).innerHTML = `    <span class="justify-content-between d-flex">
+    <span class="btn-group mr-5" role="group" style="height:40px   ">
+      <button type="button" class="btn btn-secondary csv-file">CSV File</button>
+      <button type="button" class="btn btn-secondary json-data">JSON Data</button>
     </span>
 
-    <span class="card border-dark mb-3 mt-4">
+    <span class="text-right border">
+      <span class="btn-group btn-group-toggle mr-3 table-theme data-toggle="buttons">
+        <label class="btn btn-dark active dark-theme">
+          <input type="radio" name="options" id="dark-theme" autocomplete="off" ${this
+            .theme === "dark-theme" && "checked"}> Dark Theme
+        </label>
+        <label class="btn btn-light light-theme">
+          <input type="radio" name="options" id="light-theme" autocomplete="off" ${this
+            .theme === "light-theme" && "checked"}> Light Theme
+        </label>
+      </span>
+
+      <span class="text-left pdfOrientation custom-control-inline mt-2">
+        <span class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" 
+            ${this.orientation === "l" && "checked"}>        
+          <label class="custom-control-label" for="l">landscape</label>
+        </span>
+        <span class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="p" name="pdf-orientation" class="custom-control-input 
+            ${this.orientation === "p" && "checked"}">        
+          <label class="custom-control-label" for="p">portrait</label>
+        </span>
+      </span>
+    
+      <button class="btn save-as-pdf mt-2">Save as PDF</button>
+    </span>
+  </span>`;
+  }
+
+  insertCode() {
+    this.elements.container.querySelector(".insert-code").innerHTML = `
+    <span class="card border-secondary mb-3 mt-4">
       <div class="card-header">
         <button class='btn copy-to-clipboard mb-3'>Copy Code to Clipboard</button>
         <h5>HTML Code</h5>
@@ -196,9 +334,14 @@ export default class TableGenerator {
       ".insert-table"
     );
     code.innerText = this.elements.table.innerHTML;
+    this.elements.container
+      .querySelector(".copy-to-clipboard")
+      .addEventListener("click", e => {
+        this.copyToClipboard();
+      });
   }
 
-  codeEvents() {
+  tableBtnsEvents() {
     this.elements.container
       .querySelector(".json-data")
       .addEventListener("click", e => {
@@ -210,11 +353,6 @@ export default class TableGenerator {
       .addEventListener("click", e => {
         const file = this.collectionToCsv();
         this.download("data.csv", file);
-      });
-    this.elements.container
-      .querySelector(".copy-to-clipboard")
-      .addEventListener("click", e => {
-        this.copyToClipboard();
       });
     this.elements.container
       .querySelector(".save-as-pdf")
@@ -252,6 +390,7 @@ export default class TableGenerator {
       darkTheme.classList.remove("active");
       tableBns.forEach(btn => btn.classList.remove("btn-secondary"));
     }
+    this.insertCode();
   }
 
   changeOrder(count, sortBy) {
@@ -260,7 +399,7 @@ export default class TableGenerator {
       [a, b] = [a[sortBy], b[sortBy]];
       if (count === index) [a, b] = [b, a];
 
-      if (`${a - b}` !== "NaN") return a - b;
+      if ((a - b).toString() !== "NaN") return a - b;
 
       [a, b] = [a.toLowerCase(), b.toLowerCase()];
       return a > b ? 1 : a < b ? -1 : 0;
