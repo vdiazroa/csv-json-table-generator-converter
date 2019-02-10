@@ -12,6 +12,17 @@ export default class TableGenerator {
     };
     this.orientation = "l";
     this.theme = "dark-theme";
+
+    this.conditions = {
+      equals: (a, b) => a == b,
+      greaterThan: (a, b) => a > b,
+      greaterOrEqualThan: (a, b) => a >= b,
+      lessThan: (a, b) => a < b,
+      lessOrEqualThan: (a, b) => a <= b,
+      includes: (a, b) => a.includes(b),
+      startsWith: (a, b) => a.startsWith(b),
+      endsWith: (a, b) => a.endsWith(b)
+    };
   }
 
   generatePDF() {
@@ -32,6 +43,9 @@ export default class TableGenerator {
     this.elements.table = this.elements.container.querySelector(
       ".insert-table"
     );
+    this.elements.container.querySelector(
+      ".insert-filters"
+    ).innerHTML = this.parseFilters();
     this.elements.table.innerHTML = this.parseTable();
     this.tableEvents();
     this.insertCode();
@@ -49,6 +63,14 @@ export default class TableGenerator {
     this.count = -1;
     // this.options.titles.forEach(() => this.count.push(0));
     return array;
+  }
+
+  addFilters(filters) {
+    return filters.reduce((acc, filter) => {
+      return acc.filter(data =>
+        condition(data[filter.title].toLowerCase(), filter.value.toLowerCase())
+      );
+    }, collection);
   }
 
   collectionToCsv() {
@@ -84,6 +106,54 @@ export default class TableGenerator {
     element.click();
 
     document.body.removeChild(element);
+  }
+
+  parseFilters() {
+    const titles = this.options.titles.reduce((string, title) => {
+      return string + `<option value="${title}">${title}</option>`;
+    }, "");
+    let conditions = "";
+    for (let i in this.conditions) {
+      conditions += `<option value="${i}">${i}</option>`;
+    }
+    return `
+    <div class="form-inline">
+      <div class="select-wrapper">
+        <select class="form-control mr-2" id="title-filter" data-label="wave">
+        ${titles}
+        </select>
+      </div>
+      <div class="select-wrapper">
+        <select class="form-control mr-2" id="condition-filter" data-label="wave">
+        ${conditions}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="filter-value" class="sr-only">value</label>
+        <input type="text" class="form-control mr-2" id="filter-value" placeholder="value">
+      </div>
+      <button class="btn btn-primary">add Filter</button>
+    </div>
+    <div class="filters"><div>`;
+  }
+
+  addFilterStatus(filter) {
+    return `
+    <div class="toast" role="status" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="mr-auto">${filter.title} ${filter.condition} ${
+      filter.value
+    }</strong>
+        <button
+          type="button"
+          class="ml-2 mb-1 close"
+          data-dismiss="toast"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>`;
   }
 
   parseTable() {
