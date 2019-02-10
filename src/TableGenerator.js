@@ -72,7 +72,7 @@ export default class TableGenerator {
         const condition = this.conditions[filter.condition];
         let a = data[filter.title];
         let b = filter.value;
-        return `${a - b}` !== "NaN"
+        return (a - b).toString() !== "NaN"
           ? condition(Number(a), Number(b))
           : condition(a.toLowerCase(), b.toLowerCase());
       });
@@ -385,7 +385,7 @@ export default class TableGenerator {
       [a, b] = [a[sortBy], b[sortBy]];
       if (count === index) [a, b] = [b, a];
 
-      if (`${a - b}` !== "NaN") return a - b;
+      if ((a - b).toString() !== "NaN") return a - b;
 
       [a, b] = [a.toLowerCase(), b.toLowerCase()];
       return a > b ? 1 : a < b ? -1 : 0;
