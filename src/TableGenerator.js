@@ -45,12 +45,9 @@ export default class TableGenerator {
     this.elements.table = this.elements.container.querySelector(
       ".insert-table"
     );
-    this.elements.container.querySelector(
-      ".insert-filters"
-    ).innerHTML = this.parseFilters();
     this.elements.table.innerHTML = this.parseTable(this.collection);
-    this.filterEvents();
     this.tableEvents();
+    this.tableTheme();
     this.insertCode();
     this.codeEvents();
   }
@@ -208,10 +205,7 @@ export default class TableGenerator {
         if (button) {
           this.count = this.changeOrder(this.count, button.value);
           this.elements.table.innerHTML = this.parseTable(this.addFilters());
-          this.tableEvents();
-          this.insertCode();
-          this.codeEvents();
-          this.tableTheme();
+          this.generateTable();
         }
       });
   }
@@ -240,7 +234,7 @@ export default class TableGenerator {
               .setAttribute("disabled", true);
 
           this.elements.table.innerHTML = this.parseTable(this.addFilters());
-          this.tableEvents();
+          this.generateTable();
         }
       });
 
@@ -260,8 +254,7 @@ export default class TableGenerator {
           filterDiv.remove();
 
           this.elements.table.innerHTML = this.parseTable(this.addFilters());
-          this.tableEvents();
-
+          this.generateTable();
           const filtersQ = this.elements.container.querySelectorAll(".filter");
           if (filtersQ.length === 3)
             this.elements.container
@@ -378,6 +371,8 @@ export default class TableGenerator {
       darkTheme.classList.remove("active");
       tableBns.forEach(btn => btn.classList.remove("btn-secondary"));
     }
+    this.insertCode();
+    this.codeEvents();
   }
 
   changeOrder(count, sortBy) {

@@ -18,6 +18,10 @@ export default class UploadFile extends TableGenerator {
     reader.onload = file => {
       this.formatData(file);
       this.collection = this.dataToObject(this.options.data);
+      this.elements.container.querySelector(
+        ".insert-filters"
+      ).innerHTML = this.parseFilters();
+      this.filterEvents();
       this.generateTable();
     };
   }

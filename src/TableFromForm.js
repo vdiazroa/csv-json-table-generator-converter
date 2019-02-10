@@ -10,6 +10,10 @@ export default class TableFromForm extends TableGenerator {
     this.getElements();
     this.registerEvents(this.elements);
     this.setRemoveAttributeDisabled();
+    this.elements.container.querySelector(
+      ".insert-filters"
+    ).innerHTML = this.parseFilters();
+    this.filterEvents();
   }
   getElements() {
     this.elements.form = this.elements.container.querySelector(".table-form");
@@ -23,6 +27,10 @@ export default class TableFromForm extends TableGenerator {
     form.addEventListener("submit", e => {
       e.preventDefault();
       this.collection = this.dataToObject(this.collectData());
+      this.elements.container.querySelector(
+        ".insert-filters"
+      ).innerHTML = this.parseFilters();
+      this.filterEvents();
       this.generateTable();
     });
     inputs.addEventListener("click", e => {
