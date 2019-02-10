@@ -258,8 +258,15 @@ export default class TableGenerator {
           const index = this.filters.indexOf(toDelete);
           this.filters.splice(index, 1);
           filterDiv.remove();
+
           this.elements.table.innerHTML = this.parseTable(this.addFilters());
           this.tableEvents();
+
+          const filtersQ = this.elements.container.querySelectorAll(".filter");
+          if (filtersQ.length === 3)
+            this.elements.container
+              .querySelector(".addFilter")
+              .removeAttribute("disabled");
         }
       });
   }
