@@ -13,18 +13,6 @@ export default class TableGenerator {
     this.orientation = "l";
     this.theme = "dark-theme";
 
-    // this.conditions = {
-    //   equals: (a, b) => a == b,
-    //   isNot: (a, b) => a != b,
-    //   greaterThan: (a, b) => a > b,
-    //   greaterOrEqualThan: (a, b) => a >= b,
-    //   lessThan: (a, b) => a < b,
-    //   lessOrEqualThan: (a, b) => a <= b,
-    //   includes: (a, b) => a.includes(b),
-    //   startsWith: (a, b) => a.startsWith(b),
-    //   endsWith: (a, b) => a.endsWith(b)
-    // };
-
     this.conditions = {
       "=": (a, b) => a == b,
       "!=": (a, b) => a != b,
@@ -75,7 +63,6 @@ export default class TableGenerator {
       return collection;
     }, []);
     this.count = -1;
-    // this.options.titles.forEach(() => this.count.push(0));
     return array;
   }
 
@@ -99,7 +86,7 @@ export default class TableGenerator {
   }
 
   collectionToCsv() {
-    let string = Object.keys(this.addFilters()[0]).join(",");
+    let string = Object.keys(this.collection[0]).join(",");
     this.addFilters().forEach(
       col => (string += "\n" + Object.values(col).join(","))
     );
@@ -225,7 +212,6 @@ export default class TableGenerator {
         e.stopPropagation();
         if (button) {
           this.count = this.changeOrder(this.count, button.value);
-          this.elements.table.innerHTML = this.parseTable(this.addFilters());
           this.generateTable();
         }
       });
@@ -253,8 +239,6 @@ export default class TableGenerator {
             this.elements.container
               .querySelector(".addFilter")
               .setAttribute("disabled", true);
-
-          this.elements.table.innerHTML = this.parseTable(this.addFilters());
           this.generateTable();
         }
       });
@@ -273,9 +257,8 @@ export default class TableGenerator {
           const index = this.filters.indexOf(toDelete);
           this.filters.splice(index, 1);
           filterDiv.remove();
-
-          this.elements.table.innerHTML = this.parseTable(this.addFilters());
           this.generateTable();
+
           const filtersQ = this.elements.container.querySelectorAll(".filter");
           if (filtersQ.length === 3)
             this.elements.container
