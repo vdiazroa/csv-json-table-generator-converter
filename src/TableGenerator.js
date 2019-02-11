@@ -129,7 +129,7 @@ export default class TableGenerator {
       conditions += `<option value="${i}">${i}</option>`;
     }
     return `
-    <form class="form-inline add-filters">
+    <form class="form-inline add-filters mb-0">
       <div class="select-wrapper mb-2">
         <select class="form-control mr-2" id="title-filter" data-label="wave">
         ${titles}
@@ -144,16 +144,17 @@ export default class TableGenerator {
         <label for="filter-value" class="sr-only">value</label>
         <input type="text" class="form-control mr-2" id="filter-value" placeholder="value">
       </div>
-      <button class="btn btn-primary addFilter">add Filter</button>
+      <button class="btn btn-primary addFilter mb-2">add Filter</button>
     </form>
     <div class="filters text-center row"><div>`;
   }
 
   addFilterStatus(filter) {
     return `
-    <div class="col-3 filter text-dark" number=${filter.count}>
+    <div class="col-3 filter text-dark mt-3" number=${filter.count}>
       <div class="rounded p-0">
-        <div class="bg-warning">
+        <div class="bg-warning btn-group w-100 d-flex justify-content-between">
+          <div></div>
           <strong class="">Filter by ${filter.title}</strong>
           <button class="close text-danger pr-1 pl-1"><span aria-hidden="true">&times;</span></button>
         </div>
