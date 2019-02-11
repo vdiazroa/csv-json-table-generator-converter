@@ -20,7 +20,7 @@ export default class TableGenerator {
       "> or =": (a, b) => a >= b,
       "<": (a, b) => a < b,
       "< or =": (a, b) => a <= b,
-      includes: (a, b) => a.includes(b),
+      contains: (a, b) => a.includes(b),
       "starts with": (a, b) => a.startsWith(b),
       "ends with": (a, b) => a.endsWith(b)
     };
@@ -74,7 +74,7 @@ export default class TableGenerator {
         let b = filter.value;
         if (
           (a - b).toString() === "NaN" ||
-          filter.condition === "includes" ||
+          filter.condition === "contains" ||
           filter.condition === "starts with" ||
           filter.condition === "ends with"
         ) {
@@ -154,7 +154,7 @@ export default class TableGenerator {
     <div class="col-3 filter text-dark" number=${filter.count}>
       <div class="rounded p-0">
         <div class="bg-warning">
-          <strong class="text-dark">Filter: ${filter.title}</strong>
+          <strong class="text-dark">Filter by ${filter.title}</strong>
           <button class="close"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="bg-light">${filter.condition} "${filter.value}"</div>
