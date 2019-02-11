@@ -365,7 +365,7 @@ export default class TableGenerator {
     const table = this.elements.container.querySelector(".table");
     const darkTheme = this.elements.container.querySelector(".dark-theme");
     const lightTheme = this.elements.container.querySelector(".light-theme");
-    const tableBns = this.elements.container.querySelectorAll("table button");
+    const tableBns = this.elements.table.querySelectorAll("button");
     if (this.theme === "dark-theme") {
       table.classList.remove("table-light");
       table.classList.add("table-dark");
