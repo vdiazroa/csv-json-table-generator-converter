@@ -92,7 +92,8 @@ export default class TableGenerator {
           filter.condition === "ends with"
         ) {
           return condition(a.toLowerCase(), b.toLowerCase());
-        } else condition(Number(a), Number(b));
+        }
+        return condition(Number(a), Number(b));
       });
     }, this.collection);
   }
