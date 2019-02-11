@@ -130,17 +130,17 @@ export default class TableGenerator {
     }
     return `
     <form class="form-inline add-filters">
-      <div class="select-wrapper">
+      <div class="select-wrapper mb-2">
         <select class="form-control mr-2" id="title-filter" data-label="wave">
         ${titles}
         </select>
       </div>
-      <div class="select-wrapper">
+      <div class="select-wrapper mb-2">
         <select class="form-control mr-2" id="condition-filter" data-label="wave">
         ${conditions}
         </select>
       </div>
-      <div class="form-group">
+      <div class="form-group mb-2">
         <label for="filter-value" class="sr-only">value</label>
         <input type="text" class="form-control mr-2" id="filter-value" placeholder="value">
       </div>
@@ -270,14 +270,13 @@ export default class TableGenerator {
   insertTableBtns() {
     this.elements.container.querySelector(
       ".insert-table-btns"
-    ).innerHTML = `    <span class="justify-content-between d-flex">
-    <span class="btn-group mr-5" role="group" style="height:40px   ">
-      <button type="button" class="btn btn-secondary csv-file">CSV File</button>
-      <button type="button" class="btn btn-secondary json-data">JSON Data</button>
-    </span>
+    ).innerHTML = `<span class="row">
+      <span class="btn-group col mb-3" role="group" >
+        <button type="button" class="btn btn-secondary csv-file">CSV File</button>
+        <button type="button" class="btn btn-secondary json-data">JSON Data</button>
+      </span>
 
-    <span class="text-right border">
-      <span class="btn-group btn-group-toggle mr-3 table-theme data-toggle="buttons">
+      <span class="btn-group btn-group-toggle table-theme col mb-3 custom-control-inline" >
         <label class="btn btn-dark active dark-theme">
           <input type="radio" name="options" id="dark-theme" autocomplete="off" ${this
             .theme === "dark-theme" && "checked"}> Dark Theme
@@ -288,21 +287,21 @@ export default class TableGenerator {
         </label>
       </span>
 
-      <span class="text-left pdfOrientation custom-control-inline mt-2">
-        <span class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" 
-            ${this.orientation === "l" && "checked"}>        
-          <label class="custom-control-label" for="l">landscape</label>
+      <span class="pdfOrientation mb-3 col d-flex">
+        <span class="mr-3 ml-4 text-left ">
+          <div class="custom-radio">
+            <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" 
+              ${this.orientation === "l" && "checked"}>        
+            <label class="custom-control-label" for="l">landscape</label>
+          </div>
+          <div class="custom-radio">
+            <input type="radio" id="p" name="pdf-orientation" class="custom-control-input 
+              ${this.orientation === "p" && "checked"}">        
+            <label class="custom-control-label" for="p">portrait</label>
+          </div>
         </span>
-        <span class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="p" name="pdf-orientation" class="custom-control-input 
-            ${this.orientation === "p" && "checked"}">        
-          <label class="custom-control-label" for="p">portrait</label>
-        </span>
+        <button class="btn save-as-pdf">Save as PDF</button>
       </span>
-    
-      <button class="btn save-as-pdf mt-2">Save as PDF</button>
-    </span>
   </span>`;
   }
 
