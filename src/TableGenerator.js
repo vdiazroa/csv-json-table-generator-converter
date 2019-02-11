@@ -154,10 +154,12 @@ export default class TableGenerator {
     <div class="col-3 filter text-dark" number=${filter.count}>
       <div class="rounded p-0">
         <div class="bg-warning">
-          <strong class="text-dark">Filter by ${filter.title}</strong>
-          <button class="close"><span aria-hidden="true">&times;</span></button>
+          <strong class="">Filter by ${filter.title}</strong>
+          <button class="close text-danger pr-1 pl-1"><span aria-hidden="true">&times;</span></button>
         </div>
-        <div class="bg-light">${filter.condition} "${filter.value}"</div>
+        <div class="border border-warning">${filter.title} ${
+      filter.condition
+    } "${filter.value}"</div>
       </div>
     </div>`;
   }
