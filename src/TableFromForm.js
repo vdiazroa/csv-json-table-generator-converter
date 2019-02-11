@@ -194,7 +194,7 @@ export default class TableFromForm extends TableGenerator {
         placeholder='${i || "input " + (index + 1)}'
         class='input col form-control'>`;
     }
-    inputText += `</div><div class="col-3 col-lg-2 mt-2">
+    inputText += `</div><div class="col-3 col-lg-2 mt-2 pr-0">
       <button class="addField btn btn-primary">+</button>
       <button class="delField btn btn-danger">-</button></div>
     </div>`;
