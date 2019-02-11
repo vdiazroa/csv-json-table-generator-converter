@@ -3,7 +3,7 @@ import UploadFile from "./UploadFromFile.js";
 
 const table1 = new UploadFile({ container: "#container-0" });
 
-// const table2 = new TableFromForm();
+const table2 = new TableFromForm();
 
 const options = {
   title: "Example",
