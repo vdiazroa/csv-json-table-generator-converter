@@ -166,7 +166,7 @@ export default class TableGenerator {
   }
 
   parseTable(collection) {
-    let table = `<table class="table table-striped table-dark text-center mt-2">
+    let table = `<table class="table table-striped table-dark text-center mt-2 border">
     <thead>
       <tr>`;
     this.options.titles.forEach(element => {
