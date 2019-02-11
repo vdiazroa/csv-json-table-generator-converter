@@ -178,9 +178,16 @@ export default class TableFromForm extends TableGenerator {
       </div>
       <button class='btn generate-table'>Update Data</button>
       </form>
-      <div class='insert-filters m-3'></div>
-      <div class='insert-table m-3'></div>
-      <div class="insert-table-btns container"></div>
+      
+      <span class="card border-secondary">
+        <div class="card-header">
+          <h5>Table generated from data</h5>
+        </div>
+        <div class='insert-filters card-body'></div>
+        <div class='insert-table mr-2 ml-2'></div>
+        <div class="insert-table-btns container"></div>
+      </span>
+            
       <div class="insert-code container"></div>`;
     this.elements.container.innerHTML = inputText;
   }
