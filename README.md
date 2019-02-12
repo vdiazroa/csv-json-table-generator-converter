@@ -1,5 +1,5 @@
 ---
-# Table generator widget version
+# csv-json-table-generator-converter widget version
 
 This small project was an idea I had when i was learning js.
 
