@@ -5,12 +5,11 @@ This small project was an idea I had when i was learning js.
 
 written in Vanilla JS ES6 Syntax
 
-used html2canvas and jspdf to export as pdf
+the only 2 libraries I used are html2canvas and jspdf to export the data as pdf (experimental version)
 
 The idea of the project is create html tables and get the html code, from an csv file, or from a form, with the idea to use it in different webpages
 added filter and sort
 addes export as csv, export as json
-I also added the option to save as pdf (experimental version)
 
 to get the design is necessary add bootstrap css
 ---
