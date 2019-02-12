@@ -11,7 +11,8 @@ The idea of the project is create html tables and get the html code, from an csv
 added filter and sort
 addes export as csv, export as json
 
-to get the design is necessary add bootstrap css
+to get the design it's necessary add bootstrap css
+
 ---
 **The project consists in 3 classes**
 
