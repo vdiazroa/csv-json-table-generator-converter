@@ -29,7 +29,11 @@ export default class UploadFile extends TableGenerator {
     };
   }
   formatData(csv) {
-    this.options.data = csv.target.result.replace(/\r/g, "").split("\n");
+    this.options.data = csv.target.result
+      .replace(/\r/g, "")
+      .replace(/\t/g, ",")
+      .replace(/;/g, ",")
+      .split("\n");
     this.options.titles = this.options.data.shift().split(",");
   }
   parseHTML() {
