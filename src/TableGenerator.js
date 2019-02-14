@@ -62,7 +62,7 @@ export default class TableGenerator {
       collection.push(singleItem);
       return collection;
     }, []);
-    this.count = -1;
+    this.orderCount = -1;
     return array;
   }
 
@@ -86,11 +86,9 @@ export default class TableGenerator {
   }
 
   collectionToCsv() {
-    let string = Object.keys(this.collection[0]).join(",");
-    this.addFilters().forEach(
-      col => (string += "\n" + Object.values(col).join(","))
-    );
-    return string;
+    return this.addFilters().reduce((string, col) => {
+      return string + "\n" + Object.values(col).join(",");
+    }, Object.keys(this.collection[0]).join(","));
   }
 
   collectionToJSON() {
@@ -100,8 +98,7 @@ export default class TableGenerator {
       }
       return element;
     });
-    json = JSON.stringify(json, null, 1);
-    return json;
+    return JSON.stringify(json, null, 1);
   }
 
   download(filename, text) {
@@ -111,12 +108,10 @@ export default class TableGenerator {
       "data:text/plain;charset=utf-8," + encodeURIComponent(text)
     );
     element.setAttribute("download", filename);
-
     element.style.display = "none";
+
     document.body.appendChild(element);
-
     element.click();
-
     document.body.removeChild(element);
   }
 
@@ -166,44 +161,43 @@ export default class TableGenerator {
   }
 
   parseTable(collection) {
-    let table = `<table class="table table-striped table-dark text-center mt-2 border">
-    <thead>
-      <tr>`;
-    this.options.titles.forEach(element => {
-      table += `
+    const titles = this.options.titles.reduce((string, title) => {
+      return `${string}
         <th>
-          <button value="${element}" class='btn btn-secondary w-100'>
-            ${element}<i class="fas fa-long-arrow-alt-up"></i><i class="fas fa-long-arrow-alt-down"></i>
+          <button value="${title}" class='btn btn-secondary w-100'>
+            ${title}<i class="fas fa-long-arrow-alt-up"></i><i class="fas fa-long-arrow-alt-down"></i>
           </button>
         </th>`;
-    });
-    table += `
+    }, "");
+
+    const data = collection.reduce((string, data) => {
+      let tds = "";
+      for (let i in data) {
+        tds += `
+          <td>${data[i]}</td>`;
+      }
+      return `${string}
+      <tr>${tds}
+      </tr>`;
+    }, "");
+
+    return `<table class="table table-striped table-dark text-center mt-2 border">
+    <thead>
+      <tr>${titles}
       </tr>
     </thead>
-    <tbody>`;
-    collection.forEach(element => {
-      table += `
-      <tr>`;
-      for (let i in element) {
-        table += `
-          <td>${element[i]}</td>`;
-      }
-      table += `
-      </tr>`;
-    });
-    table += `
+    <tbody>${data}
     </tbody>
   </table>`;
-    return table;
   }
 
   copyToClipboard() {
-    const el = document.createElement("textarea");
-    el.value = this.elements.container.querySelector(".code").innerText;
-    document.body.appendChild(el);
-    el.select();
+    const element = document.createElement("textarea");
+    element.value = this.elements.container.querySelector(".code").innerText;
+    document.body.appendChild(element);
+    element.select();
     document.execCommand("copy");
-    document.body.removeChild(el);
+    document.body.removeChild(element);
     alert("Code copied");
   }
 
@@ -214,7 +208,7 @@ export default class TableGenerator {
         const button = e.target.closest("button");
         e.stopPropagation();
         if (button) {
-          this.count = this.changeOrder(this.count, button.value);
+          this.orderCount = this.changeOrder(this.orderCount, button.value);
           this.generateTable();
         }
       });
@@ -252,13 +246,12 @@ export default class TableGenerator {
         e.preventDefault();
         if (e.target.closest(".close")) {
           e.stopPropagation();
+          const counter = filterDiv.getAttribute("number");
+          this.filters = this.filters.filter(
+            element => element.count != counter
+          );
           const filterDiv = e.target.closest(".filter");
           e.stopPropagation();
-          const counter = filterDiv.getAttribute("number");
-
-          const toDelete = this.filters.find(elem => elem.count == counter);
-          const index = this.filters.indexOf(toDelete);
-          this.filters.splice(index, 1);
           filterDiv.remove();
           this.generateTable();
 
