@@ -43,9 +43,6 @@ export default class TableGenerator {
   }
 
   generateTable() {
-    this.elements.table = this.elements.container.querySelector(
-      ".insert-table"
-    );
     this.elements.table.innerHTML = this.parseTable(this.addFilters());
     this.tableEvents();
     this.insertTableBtns();
@@ -245,12 +242,13 @@ export default class TableGenerator {
         e.preventDefault();
         if (e.target.closest(".close")) {
           e.stopPropagation();
+          const filterDiv = e.target.closest(".filter");
+          e.stopPropagation();
+
           const counter = filterDiv.getAttribute("number");
           this.filters = this.filters.filter(
             element => element.count != counter
           );
-          const filterDiv = e.target.closest(".filter");
-          e.stopPropagation();
           filterDiv.remove();
           this.generateTable();
 

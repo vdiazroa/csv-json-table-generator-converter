@@ -6,6 +6,9 @@ export default class UploadFile extends TableGenerator {
   }
   init() {
     this.elements.container.innerHTML = this.parseHTML();
+    this.elements.table = this.elements.container.querySelector(
+      ".insert-table"
+    );
     this.elements.container
       .querySelector(".form-control-file")
       .addEventListener("change", e => {

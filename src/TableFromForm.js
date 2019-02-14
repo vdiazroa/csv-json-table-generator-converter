@@ -16,6 +16,9 @@ export default class TableFromForm extends TableGenerator {
     this.filterEvents();
   }
   getElements() {
+    this.elements.table = this.elements.container.querySelector(
+      ".insert-table"
+    );
     this.elements.form = this.elements.container.querySelector(".table-form");
     this.elements.inputs = this.elements.container.querySelector(".inputs");
     this.elements.addCol = this.elements.container.querySelector(".addCol");
