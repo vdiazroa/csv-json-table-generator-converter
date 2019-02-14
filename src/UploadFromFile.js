@@ -34,6 +34,7 @@ export default class UploadFile extends TableGenerator {
       .replace(/\t/g, ",")
       .replace(/;/g, ",")
       .split("\n");
+    while (this.options.data.slice(-1)[0] === "") this.options.data.pop();
     this.options.titles = this.options.data.shift().split(",");
   }
   parseHTML() {
