@@ -5,7 +5,7 @@ This small project was an idea I had when I was learning js.
 
 Written in Vanilla JS ES6 Syntax
 
-The only 2 libraries used are html2canvas and jspdf to export the data as pdf (experimental version => UNCLEAR ? WHAT IT EXPERIMENTAL ? YOUR PROJECT OR jspdf?)
+The only 2 libraries used are html2canvas and jspdf to export the data as pdf (experimental feature)
 
 The idea of the project is to create html tables and generate the html code from a csv file, or from a form, and to be able to use is in different webpages.
 It allows to filter and sort the data.
@@ -53,7 +53,7 @@ then it creates a table with the data from the csv file, and the html code (mayb
 
 Using **TableFromForm() Class** without any option as argument, this instance will use the default container (#cointainer-1)
 
-how there is no data provide in options, it will generate an empty form where it can be added some data to generate the table => UNCLEAR quieres decir "si no hay data en "options" ?
+how there is no data provide in options, it will generate an empty form where it can be added some data to generate the table
 
 ```
 const table2 = new TableFromForm();
