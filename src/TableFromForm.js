@@ -130,11 +130,20 @@ export default class TableFromForm extends TableGenerator {
     } else if (tableBtn.hasAttribute("disabled")) {
       title.classList.remove("border-red");
       const redBorder = this.elements.container.querySelectorAll(".border-red");
-      if (redBorder.length === 1) redBorder[0].classList.remove("border-red");
-    }
-    if (!this.elements.container.querySelector(".border-red")) {
-      allAddFields.forEach(btn => btn.removeAttribute("disabled"));
-      tableBtn.removeAttribute("disabled");
+      const redBorderVal = Array.from(redBorder).map(title => title.value);
+      redBorder.forEach(elem => {
+        const counter = redBorderVal.reduce((counter, val) => {
+          if (val === elem.value) return counter + 1;
+          return counter;
+        }, 0);
+        if (counter === 1) {
+          elem.classList.remove("border-red");
+        }
+      });
+      if (!this.elements.container.querySelector(".border-red")) {
+        allAddFields.forEach(btn => btn.removeAttribute("disabled"));
+        tableBtn.removeAttribute("disabled");
+      }
     }
   }
 
@@ -154,7 +163,7 @@ export default class TableFromForm extends TableGenerator {
     return this.options.data;
   }
   parseForm() {
-    const inputtitles = this.options.titles.reduce((string, title, i) => {
+    const inputTitles = this.options.titles.reduce((string, title, i) => {
       return `${string}
       <input type='text' value="${title}" placeholder='${"input " + (i + 1)}' 
       class='title input col form-control' col='${i}' required>`;
@@ -166,7 +175,7 @@ export default class TableFromForm extends TableGenerator {
       <div class="inputs">
         <div class="titles row">
           <div class="col-9 col-lg-10 titlesContainer row">
-            ${inputtitles}
+            ${inputTitles}
           </div>
         <div class="div-green-btn col-3 col-lg-2 mt-1">
          <button class="addCol btn btn-success">+</button>
