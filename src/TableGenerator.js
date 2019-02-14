@@ -55,15 +55,14 @@ export default class TableGenerator {
   }
 
   dataToObject(data) {
-    const array = data.reduce((collection, element) => {
+    this.orderCount = -1;
+    return data.reduce((collection, element) => {
       const singleItem = {};
       const items = element.split(",");
       for (let i in items) singleItem[this.options.titles[i]] = items[i];
       collection.push(singleItem);
       return collection;
     }, []);
-    this.orderCount = -1;
-    return array;
   }
 
   addFilters() {
@@ -390,29 +389,29 @@ export default class TableGenerator {
     });
     return count === index ? -1 : index;
   }
-
-  // changeOrder(itemTitle) {
-  //   const newArray = [...this.collection];
-  //   this.newOrder(newArray, itemTitle);
-
-  //   this.areNotEquals(this.collection, newArray)
-  //     ? (this.collection = newArray)
-  //     : this.newOrder(this.collection, itemTitle, "desc-order");
-  // }
-
-  // areNotEquals(arrayOne, arrayTwo) {
-  //   return arrayOne.some((obj, i) => !Object.is(obj, arrayTwo[i]));
-  // }
-
-  // newOrder(array, sortBy, orderBy) {
-  //   array.sort((a, b) => {
-  //     let valA = a[sortBy];
-  //     let valB = b[sortBy];
-  //     if (orderBy === "desc-order") [valA, valB] = [valB, valA];
-  //     if (`${valA - valB}` !== "NaN") return valA - valB;
-  //     valA = valA.toLowerCase();
-  //     valB = valB.toLowerCase();
-  //     return valA > valB ? 1 : valA < valB ? -1 : 0;
-  //   });
-  // }
 }
+
+// changeOrder(itemTitle) {
+//   const newArray = [...this.collection];
+//   this.newOrder(newArray, itemTitle);
+
+//   this.areNotEquals(this.collection, newArray)
+//     ? (this.collection = newArray)
+//     : this.newOrder(this.collection, itemTitle, "desc-order");
+// }
+
+// areNotEquals(arrayOne, arrayTwo) {
+//   return arrayOne.some((obj, i) => !Object.is(obj, arrayTwo[i]));
+// }
+
+// newOrder(array, sortBy, orderBy) {
+//   array.sort((a, b) => {
+//     let valA = a[sortBy];
+//     let valB = b[sortBy];
+//     if (orderBy === "desc-order") [valA, valB] = [valB, valA];
+//     if (`${valA - valB}` !== "NaN") return valA - valB;
+//     valA = valA.toLowerCase();
+//     valB = valB.toLowerCase();
+//     return valA > valB ? 1 : valA < valB ? -1 : 0;
+//   });
+// }
