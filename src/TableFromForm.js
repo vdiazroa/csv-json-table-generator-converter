@@ -151,61 +151,60 @@ export default class TableFromForm extends TableGenerator {
     return this.options.data;
   }
   parseForm() {
-    let inputText = `
-      <form action="" class="table-form form ml-3"><h1>${
-        this.options.title
-      }</h1>
-        <div class="inputs">
-          <div class="titles row">
-            <div class="col-9 col-lg-10 titlesContainer row">`;
+    const inputtitles = this.options.titles.reduce((string, title, i) => {
+      return `${string}
+      <input type='text' value="${title}" placeholder='${"input " + (i + 1)}' 
+      class='title input col form-control' col='${i}' required>`;
+    }, "");
 
-    this.options.titles.forEach(element => {
-      const index = this.options.titles.indexOf(element);
-      inputText += `<input type='text' value="${element}"
-      placeholder='${"input " + (index + 1)}' 
-      class='title input col form-control' col='${index}' required>`;
-    });
-    inputText += `</div>
-      <div class="div-green-btn col-3 col-lg-2 mt-1">
-        <button class="addCol btn btn-success">+</button>
+    this.elements.container.innerHTML = `
+    <form action="" class="table-form form ml-3">
+      <h1>${this.options.title}</h1>
+      <div class="inputs">
+        <div class="titles row">
+          <div class="col-9 col-lg-10 titlesContainer row">
+            ${inputtitles}
+          </div>
+        <div class="div-green-btn col-3 col-lg-2 mt-1">
+         <button class="addCol btn btn-success">+</button>
+        </div>
       </div>
-    </div>`;
-
-    this.collection.forEach(element => {
-      inputText += this.parseRow(element);
-    });
-    inputText += `
+      ${this.collection.reduce((string, row) => {
+        return string + this.parseRow(row);
+      }, "")}
       </div>
       <button class='btn generate-table'>Update Data</button>
-      </form>
-      
-      <span class="card border-secondary">
-        <div class="card-header">
-          <h5>Table generated from data</h5>
-        </div>
-        <div class='insert-filters card-body'></div>
-        <div class='insert-table mr-2 ml-2'></div>
-        <div class="insert-table-btns container"></div>
-      </span>
-            
-      <div class="insert-code container"></div>`;
-    this.elements.container.innerHTML = inputText;
+    </form>
+    
+    <span class="card border-secondary">
+      <div class="card-header">
+        <h5>Table generated from data</h5>
+      </div>
+      <div class='insert-filters card-body'></div>
+      <div class='insert-table mr-2 ml-2'></div>
+      <div class="insert-table-btns container"></div>
+    </span>
+    <div class="insert-code container"></div>`;
   }
   parseRow(element) {
-    let inputText = `<div class='divRow row'>
-                      <div class="col-9 col-lg-10 row inputContainer">`;
+    let inputs = "";
     for (let i in element) {
       const index = this.options.titles.indexOf(i);
-      inputText += `
+      inputs += `
         <input type="text" value='${element[i]}' col='${index}' 
         placeholder='${i || "input " + (index + 1)}'
         class='input col form-control'>`;
     }
-    inputText += `</div><div class="col-3 col-lg-2 mt-2 pr-0">
-      <button class="addField btn btn-primary">+</button>
-      <button class="delField btn btn-danger">-</button></div>
+    return `
+    <div class='divRow row'>
+      <div class="col-9 col-lg-10 row inputContainer">
+        ${inputs}
+      </div>
+      <div class="col-3 col-lg-2 mt-2 pr-0">
+        <button class="addField btn btn-primary">+</button>
+        <button class="delField btn btn-danger">-</button>
+      </div>
     </div>`;
-    return inputText;
   }
   addEmptyRow(currentDiv) {
     const emptyCollection = {};
