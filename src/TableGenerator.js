@@ -69,7 +69,7 @@ export default class TableGenerator {
         let a = data[filter.title];
         let b = filter.value;
         if (
-          (a - b).toString() === "NaN" ||
+          isNaN(a - b) ||
           filter.condition === "contains" ||
           filter.condition === "starts with" ||
           filter.condition === "ends with"
@@ -380,7 +380,7 @@ export default class TableGenerator {
       [a, b] = [a[sortBy], b[sortBy]];
       if (count === index) [a, b] = [b, a];
 
-      if ((a - b).toString() !== "NaN") return a - b;
+      if (isNaN(a - b)) return a - b;
 
       [a, b] = [a.toLowerCase(), b.toLowerCase()];
       return a > b ? 1 : a < b ? -1 : 0;
