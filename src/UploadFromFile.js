@@ -29,7 +29,6 @@ export default class UploadFile extends TableGenerator {
     };
   }
   formatData(csv) {
-    this.options.titles = {};
     this.options.data = csv.target.result.replace(/\r/g, "").split("\n");
     this.options.titles = this.options.data.shift().split(",");
   }
