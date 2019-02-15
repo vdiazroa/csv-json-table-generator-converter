@@ -64,7 +64,6 @@ export default class TableFromForm extends TableGenerator {
         const colNumber = title.getAttribute("col");
         this.titleValidator(title, colNumber);
         const col = form.querySelectorAll(`.divRow input[col='${colNumber}']`);
-        this.options.titles[colNumber] = title.value;
         col.forEach(el => {
           title.value === ""
             ? el.setAttribute("placeholder", `input ${parseInt(colNumber) + 1}`)
@@ -86,7 +85,6 @@ export default class TableFromForm extends TableGenerator {
       const inputContainer = col.querySelector(".inputContainer");
       inputContainer.appendChild(newInput);
     });
-    this.options.titles.push(`input ${colNumber + 1}`);
   }
 
   generateNewInput(colNumber) {
@@ -200,11 +198,12 @@ export default class TableFromForm extends TableGenerator {
   }
   parseRow(element) {
     let inputs = "";
+    const titles = Object.keys(element);
     for (let i in element) {
-      const index = this.options.titles.indexOf(i);
+      const index = titles.indexOf(i);
       inputs += `
         <input type="text" value='${element[i]}' col='${index}' 
-        placeholder='${i || "input " + (index + 1)}'
+        placeholder='${i}'
         class='input col form-control'>`;
     }
     return `
@@ -220,8 +219,8 @@ export default class TableFromForm extends TableGenerator {
   }
   addEmptyRow(currentDiv) {
     const emptyCollection = {};
-    this.options.titles.forEach(input => {
-      emptyCollection[input] = "";
+    this.elements.container.querySelectorAll(".title").forEach(input => {
+      emptyCollection[input.value || input.placeholder] = "";
     });
     const newRow = this.parseRow(emptyCollection);
     currentDiv.insertAdjacentHTML("afterEnd", newRow);
