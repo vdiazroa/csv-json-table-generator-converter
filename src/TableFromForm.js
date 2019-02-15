@@ -146,6 +146,10 @@ export default class TableFromForm extends TableGenerator {
   }
 
   collectData() {
+    this.options.titles = [];
+    this.elements.container.querySelectorAll(".title").forEach(title => {
+      this.options.titles.push(title.value);
+    });
     this.options.data = [];
     this.elements.container.querySelectorAll(".divRow").forEach(element => {
       let singleData = [];
