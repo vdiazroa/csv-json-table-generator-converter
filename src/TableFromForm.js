@@ -171,18 +171,35 @@ export default class TableFromForm extends TableGenerator {
       class='title input col form-control' col='${i}' required>`;
     }, "");
 
+    const delColBtns = this.options.titles.reduce((string, title, i) => {
+      return `${string}
+      <div class="col  p-1">
+        <button class="delColBtn btn btn-secondary w-100" col='${i}'>
+          Delete Column
+        </button>
+      </div>`;
+    }, "");
+
     this.elements.container.innerHTML = `
     <form action="" class="table-form form ml-3">
       <h1>${this.options.title}</h1>
-      <div class="inputs">
+      <div class="inputs">      
+        <div class="delCol row">
+          <div class="col-9 col-lg-10 delBtnsContainer row">
+            ${delColBtns}
+          </div>
+        <div class="col-3 col-lg-2 mt-2"></div>
+      </div>
+
         <div class="titles row">
           <div class="col-9 col-lg-10 titlesContainer row">
             ${inputTitles}
           </div>
         <div class="div-green-btn col-3 col-lg-2 mt-1">
-         <button class="addCol btn btn-success">+</button>
-        </div>
+          <button class="addCol btn btn-success">+</button>
+         </div>
       </div>
+      
       ${this.collection.reduce((string, row) => {
         return string + this.parseRow(row);
       }, "")}
