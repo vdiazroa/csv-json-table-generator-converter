@@ -25,6 +25,9 @@ export default class TableFromForm extends TableGenerator {
     this.elements.titlesContainer = this.elements.container.querySelector(
       ".titlesContainer"
     );
+    this.elements.delBtnsContainer = this.elements.container.querySelector(
+      ".delBtnsContainer"
+    );
   }
   registerEvents({ form, container, inputs }) {
     form.addEventListener("submit", e => {
@@ -37,7 +40,17 @@ export default class TableFromForm extends TableGenerator {
       this.generateTable();
     });
     inputs.addEventListener("click", e => {
-      e.preventDefault();
+      const removeCol = e.target.closest(".delColBtn");
+      e.stopPropagation();
+      if (removeCol) {
+        const colNumber = removeCol.getAttribute("col");
+        const colSelector = `[col="${colNumber}"]`;
+        const col = inputs.querySelectorAll(colSelector);
+        const removeBtns = inputs.querySelectorAll(".delColBtn");
+        if (removeBtns.length === 2)
+          removeBtns.forEach(btn => btn.setAttribute("disabled", true));
+        col.forEach(element => element.remove());
+      }
       if (e.target.closest(".addField")) {
         e.stopPropagation();
         this.setRemoveAttributeDisabled();
@@ -74,6 +87,9 @@ export default class TableFromForm extends TableGenerator {
   }
 
   generateCol(colNumber) {
+    this.elements.container
+      .querySelector(".delColBtn")
+      .removeAttribute("disabled");
     colNumber === 5 && this.elements.addCol.setAttribute("disabled", true);
     const newTitle = this.generateNewInput(colNumber);
     newTitle.classList.add("title");
@@ -85,6 +101,11 @@ export default class TableFromForm extends TableGenerator {
       const inputContainer = col.querySelector(".inputContainer");
       inputContainer.appendChild(newInput);
     });
+    const delColBtn = `
+    <div class="col pr-2 text-right" col='${colNumber}'>
+      <button class="delColBtn btn btn-secondary" col='${colNumber}'>- </button>
+    </div>`;
+    this.elements.delBtnsContainer.insertAdjacentHTML("beforeend", delColBtn);
   }
 
   generateNewInput(colNumber) {
@@ -173,10 +194,8 @@ export default class TableFromForm extends TableGenerator {
 
     const delColBtns = this.options.titles.reduce((string, title, i) => {
       return `${string}
-      <div class="col  p-1">
-        <button class="delColBtn btn btn-secondary w-100" col='${i}'>
-          Delete Column
-        </button>
+      <div class="col pr-2 text-right" col='${i}'>
+        <button class="delColBtn btn btn-secondary" col='${i}'>- </button>
       </div>`;
     }, "");
 
