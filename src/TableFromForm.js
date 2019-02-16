@@ -7,9 +7,11 @@ export default class TableFromForm extends TableGenerator {
   init() {
     this.collection = this.dataToObject(this.options.data);
     this.parseForm();
+    this.colcurrent = this.options.titles.length;
     this.getElements();
     this.registerEvents(this.elements);
     this.setRemoveAttributeDisabled();
+    this.setRemoveAttributeDisabled(".delColBtn");
     this.elements.container.querySelector(
       ".insert-filters"
     ).innerHTML = this.parseFilters();
@@ -25,19 +27,32 @@ export default class TableFromForm extends TableGenerator {
     this.elements.titlesContainer = this.elements.container.querySelector(
       ".titlesContainer"
     );
+    this.elements.delBtnsContainer = this.elements.container.querySelector(
+      ".delBtnsContainer"
+    );
   }
-  registerEvents({ form, container, inputs }) {
+  registerEvents({ form, container, inputs, addCol }) {
     form.addEventListener("submit", e => {
       e.preventDefault();
       this.collection = this.dataToObject(this.collectData());
-      this.elements.container.querySelector(
+      container.querySelector(
         ".insert-filters"
       ).innerHTML = this.parseFilters();
       this.filterEvents();
       this.generateTable();
     });
     inputs.addEventListener("click", e => {
-      e.preventDefault();
+      const removeCol = e.target.closest(".delColBtn");
+      e.stopPropagation();
+      if (removeCol) {
+        const delColBtnQ = container.querySelectorAll(".delColBtn").length;
+        if (delColBtnQ === 6) addCol.removeAttribute("disabled");
+        const colNumber = removeCol.getAttribute("col");
+        const colSelector = `[col="${colNumber}"]`;
+        const col = inputs.querySelectorAll(colSelector);
+        col.forEach(element => element.remove());
+        this.setRemoveAttributeDisabled(".delColBtn");
+      }
       if (e.target.closest(".addField")) {
         e.stopPropagation();
         this.setRemoveAttributeDisabled();
@@ -53,7 +68,8 @@ export default class TableFromForm extends TableGenerator {
       } else if (e.target.closest(".addCol")) {
         e.stopPropagation();
         const colNumber = container.querySelectorAll(".title").length;
-        this.generateCol(colNumber);
+        colNumber === 5 && addCol.setAttribute("disabled", true);
+        this.generateCol();
       }
     });
 
@@ -61,8 +77,8 @@ export default class TableFromForm extends TableGenerator {
       const title = e.target.closest(".title");
       e.stopPropagation();
       if (title) {
+        this.titleValidator(title);
         const colNumber = title.getAttribute("col");
-        this.titleValidator(title, colNumber);
         const col = form.querySelectorAll(`.divRow input[col='${colNumber}']`);
         col.forEach(el => {
           title.value === ""
@@ -73,18 +89,28 @@ export default class TableFromForm extends TableGenerator {
     });
   }
 
-  generateCol(colNumber) {
-    colNumber === 5 && this.elements.addCol.setAttribute("disabled", true);
-    const newTitle = this.generateNewInput(colNumber);
+  generateCol() {
+    this.elements.container
+      .querySelector(".delColBtn")
+      .removeAttribute("disabled");
+    const newTitle = this.generateNewInput(this.colcurrent);
     newTitle.classList.add("title");
     newTitle.setAttribute("required", true);
     this.elements.titlesContainer.appendChild(newTitle);
 
     this.elements.container.querySelectorAll(".divRow").forEach(col => {
-      const newInput = this.generateNewInput(colNumber);
+      const newInput = this.generateNewInput(this.colcurrent);
       const inputContainer = col.querySelector(".inputContainer");
       inputContainer.appendChild(newInput);
     });
+    const delColBtn = `
+    <div class="col text-left pl-2" col='${this.colcurrent}'>
+      <button class="delColBtn btn btn-outline-danger" col='${this.colcurrent}'>
+      - 
+      </button>
+    </div>`;
+    this.elements.delBtnsContainer.insertAdjacentHTML("beforeend", delColBtn);
+    this.colcurrent++;
   }
 
   generateNewInput(colNumber) {
@@ -101,23 +127,23 @@ export default class TableFromForm extends TableGenerator {
     return newInput;
   }
 
-  setRemoveAttributeDisabled() {
-    const delFields = this.elements.container.querySelectorAll(".delField");
-    if (delFields.length === 1) {
-      delFields.forEach(element => {
-        element.hasAttribute("disabled")
-          ? element.removeAttribute("disabled")
-          : element.setAttribute("disabled", true);
+  setRemoveAttributeDisabled(btnClass = ".delField") {
+    const btns = this.elements.container.querySelectorAll(btnClass);
+    if (btns.length === 1) {
+      btns.forEach(btn => {
+        btn.hasAttribute("disabled")
+          ? btn.removeAttribute("disabled")
+          : btn.setAttribute("disabled", true);
       });
     }
   }
 
-  titleValidator(title, colNumber) {
+  titleValidator(title) {
     const titles = this.elements.container.querySelectorAll(".title");
     const titleValues = Array.from(titles).map(title => title.value);
     const allAddFields = this.elements.container.querySelectorAll(".addField");
     const tableBtn = this.elements.container.querySelector(".generate-table");
-    titleValues.splice(colNumber, 1);
+    titleValues.splice(titleValues.indexOf(title.value), 1);
 
     if (titleValues.includes(title.value) && title.value != "") {
       allAddFields.forEach(btn => btn.setAttribute("disabled", true));
@@ -171,18 +197,33 @@ export default class TableFromForm extends TableGenerator {
       class='title input col form-control' col='${i}' required>`;
     }, "");
 
+    const delColBtns = this.options.titles.reduce((string, title, i) => {
+      return `${string}
+      <div class="col text-left pl-2" col='${i}'>
+        <button class="delColBtn btn btn-outline-danger" col='${i}'>- </button>
+      </div>`;
+    }, "");
+
     this.elements.container.innerHTML = `
     <form action="" class="table-form form ml-3">
       <h1>${this.options.title}</h1>
-      <div class="inputs">
-        <div class="titles row">
+      <div class="inputs mt-4"">      
+        <div class="delCol row">
+          <div class="col-9 col-lg-10 delBtnsContainer row">
+            ${delColBtns}
+          </div>
+        <div class="col-3 col-lg-2"></div>
+      </div>
+
+        <div class="titles row mt-1">
           <div class="col-9 col-lg-10 titlesContainer row">
             ${inputTitles}
           </div>
         <div class="div-green-btn col-3 col-lg-2 mt-1">
-         <button class="addCol btn btn-success">+</button>
-        </div>
+          <button class="addCol btn btn-success">+</button>
+         </div>
       </div>
+      
       ${this.collection.reduce((string, row) => {
         return string + this.parseRow(row);
       }, "")}
@@ -200,11 +241,13 @@ export default class TableFromForm extends TableGenerator {
     </span>
     <div class="insert-code container"></div>`;
   }
-  parseRow(element) {
+  parseRow(element, cols) {
     let inputs = "";
     const titles = Object.keys(element);
+    let colIndex = 0;
     for (let i in element) {
-      const index = titles.indexOf(i);
+      const index = (cols && cols[colIndex]) || titles.indexOf(i);
+      colIndex++;
       inputs += `
         <input type="text" value='${element[i]}' col='${index}' 
         placeholder='${i}'
@@ -223,10 +266,12 @@ export default class TableFromForm extends TableGenerator {
   }
   addEmptyRow(currentDiv) {
     const emptyCollection = {};
+    const colNumbers = [];
     this.elements.container.querySelectorAll(".title").forEach(input => {
       emptyCollection[input.value || input.placeholder] = "";
+      colNumbers.push(input.getAttribute("col"));
     });
-    const newRow = this.parseRow(emptyCollection);
+    const newRow = this.parseRow(emptyCollection, colNumbers);
     currentDiv.insertAdjacentHTML("afterEnd", newRow);
   }
 }
