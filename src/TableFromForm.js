@@ -112,8 +112,8 @@ export default class TableFromForm extends TableGenerator {
       inputContainer.appendChild(newInput);
     });
     const delColBtn = `
-    <div class="col pr-2 text-right" col='${this.colcurrent}'>
-      <button class="delColBtn btn btn-secondary" col='${this.colcurrent}'>
+    <div class="col text-left pl-2" col='${this.colcurrent}'>
+      <button class="delColBtn btn btn-outline-danger" col='${this.colcurrent}'>
       - 
       </button>
     </div>`;
@@ -207,23 +207,23 @@ export default class TableFromForm extends TableGenerator {
 
     const delColBtns = this.options.titles.reduce((string, title, i) => {
       return `${string}
-      <div class="col pr-2 text-right" col='${i}'>
-        <button class="delColBtn btn btn-secondary" col='${i}'>- </button>
+      <div class="col mt-2 text-left pl-2" col='${i}'>
+        <button class="delColBtn btn btn-outline-danger" col='${i}'>- </button>
       </div>`;
     }, "");
 
     this.elements.container.innerHTML = `
     <form action="" class="table-form form ml-3">
       <h1>${this.options.title}</h1>
-      <div class="inputs">      
+      <div class="inputs mt-2"">      
         <div class="delCol row">
           <div class="col-9 col-lg-10 delBtnsContainer row">
             ${delColBtns}
           </div>
-        <div class="col-3 col-lg-2 mt-2"></div>
+        <div class="col-3 col-lg-2"></div>
       </div>
 
-        <div class="titles row">
+        <div class="titles row mt-1">
           <div class="col-9 col-lg-10 titlesContainer row">
             ${inputTitles}
           </div>
