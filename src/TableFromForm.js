@@ -104,7 +104,7 @@ export default class TableFromForm extends TableGenerator {
       inputContainer.appendChild(newInput);
     });
     const delColBtn = `
-    <div class="col text-left pl-2" col='${this.colcurrent}'>
+    <div class="col text-left p-0 pl-1" col='${this.colcurrent}'>
       <button class="delColBtn btn btn-outline-danger" col='${this.colcurrent}'>
       - 
       </button>
@@ -199,7 +199,7 @@ export default class TableFromForm extends TableGenerator {
 
     const delColBtns = this.options.titles.reduce((string, title, i) => {
       return `${string}
-      <div class="col text-left pl-2" col='${i}'>
+      <div class="col text-left p-0 pl-1" col='${i}'>
         <button class="delColBtn btn btn-outline-danger" col='${i}'>- </button>
       </div>`;
     }, "");
