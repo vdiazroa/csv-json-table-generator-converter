@@ -11,6 +11,7 @@ export default class TableFromForm extends TableGenerator {
     this.getElements();
     this.registerEvents(this.elements);
     this.setRemoveAttributeDisabled();
+    this.setRemoveAttributeDisabled(".delColBtn");
     this.elements.container.querySelector(
       ".insert-filters"
     ).innerHTML = this.parseFilters();
@@ -30,11 +31,11 @@ export default class TableFromForm extends TableGenerator {
       ".delBtnsContainer"
     );
   }
-  registerEvents({ form, container, inputs }) {
+  registerEvents({ form, container, inputs, addCol }) {
     form.addEventListener("submit", e => {
       e.preventDefault();
       this.collection = this.dataToObject(this.collectData());
-      this.elements.container.querySelector(
+      container.querySelector(
         ".insert-filters"
       ).innerHTML = this.parseFilters();
       this.filterEvents();
@@ -44,22 +45,13 @@ export default class TableFromForm extends TableGenerator {
       const removeCol = e.target.closest(".delColBtn");
       e.stopPropagation();
       if (removeCol) {
-        const delColBtnQ = this.elements.container.querySelectorAll(
-          ".delColBtn"
-        ).length;
-        if (delColBtnQ === 6) {
-          this.elements.container
-            .querySelector(".addCol")
-            .removeAttribute("disabled");
-        }
+        const delColBtnQ = container.querySelectorAll(".delColBtn").length;
+        if (delColBtnQ === 6) addCol.removeAttribute("disabled");
         const colNumber = removeCol.getAttribute("col");
-
         const colSelector = `[col="${colNumber}"]`;
         const col = inputs.querySelectorAll(colSelector);
-        const removeBtns = inputs.querySelectorAll(".delColBtn");
-        if (removeBtns.length === 2)
-          removeBtns.forEach(btn => btn.setAttribute("disabled", true));
         col.forEach(element => element.remove());
+        this.setRemoveAttributeDisabled(".delColBtn");
       }
       if (e.target.closest(".addField")) {
         e.stopPropagation();
@@ -76,7 +68,7 @@ export default class TableFromForm extends TableGenerator {
       } else if (e.target.closest(".addCol")) {
         e.stopPropagation();
         const colNumber = container.querySelectorAll(".title").length;
-        colNumber === 5 && this.elements.addCol.setAttribute("disabled", true);
+        colNumber === 5 && addCol.setAttribute("disabled", true);
         this.generateCol();
       }
     });
@@ -135,13 +127,13 @@ export default class TableFromForm extends TableGenerator {
     return newInput;
   }
 
-  setRemoveAttributeDisabled() {
-    const delFields = this.elements.container.querySelectorAll(".delField");
-    if (delFields.length === 1) {
-      delFields.forEach(element => {
-        element.hasAttribute("disabled")
-          ? element.removeAttribute("disabled")
-          : element.setAttribute("disabled", true);
+  setRemoveAttributeDisabled(btnClass = ".delField") {
+    const btns = this.elements.container.querySelectorAll(btnClass);
+    if (btns.length === 1) {
+      btns.forEach(btn => {
+        btn.hasAttribute("disabled")
+          ? btn.removeAttribute("disabled")
+          : btn.setAttribute("disabled", true);
       });
     }
   }
