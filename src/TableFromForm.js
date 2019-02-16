@@ -199,7 +199,7 @@ export default class TableFromForm extends TableGenerator {
 
     const delColBtns = this.options.titles.reduce((string, title, i) => {
       return `${string}
-      <div class="col mt-2 text-left pl-2" col='${i}'>
+      <div class="col text-left pl-2" col='${i}'>
         <button class="delColBtn btn btn-outline-danger" col='${i}'>- </button>
       </div>`;
     }, "");
@@ -207,7 +207,7 @@ export default class TableFromForm extends TableGenerator {
     this.elements.container.innerHTML = `
     <form action="" class="table-form form ml-3">
       <h1>${this.options.title}</h1>
-      <div class="inputs mt-2"">      
+      <div class="inputs mt-4"">      
         <div class="delCol row">
           <div class="col-9 col-lg-10 delBtnsContainer row">
             ${delColBtns}
