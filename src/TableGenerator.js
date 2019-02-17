@@ -261,6 +261,7 @@ export default class TableGenerator {
       });
   }
   insertTableBtns() {
+    const containerNumber = this.options.container.slice(-1);
     this.elements.container.querySelector(
       ".insert-table-btns"
     ).innerHTML = `<span class="row">
@@ -283,14 +284,20 @@ export default class TableGenerator {
       <span class="pdfOrientation mb-3 col d-flex">
         <span class="mr-3 ml-4 text-left ">
           <div class="custom-radio">
-            <input type="radio" id="l" name="pdf-orientation" class="custom-control-input" 
+            <input type="radio" id="${"l" + containerNumber}" 
+              name="${"pdf" + containerNumber}" class="custom-control-input" 
               ${this.orientation === "l" && "checked"}>        
-            <label class="custom-control-label" for="l">landscape</label>
+            <label class="custom-control-label" for="${"l" + containerNumber}">
+              landscape
+            </label>
           </div>
           <div class="custom-radio">
-            <input type="radio" id="p" name="pdf-orientation" class="custom-control-input 
+            <input type="radio" id="${"p" + containerNumber}" 
+              name=${"pdf" + containerNumber} class="custom-control-input 
               ${this.orientation === "p" && "checked"}">        
-            <label class="custom-control-label" for="p">portrait</label>
+            <label class="custom-control-label" for="${"p" + containerNumber}">
+              portrait
+            </label>
           </div>
         </span>
         <button class="btn save-as-pdf">Save as PDF</button>
