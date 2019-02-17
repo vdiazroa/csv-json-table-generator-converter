@@ -350,7 +350,7 @@ export default class TableGenerator {
     this.elements.container
       .querySelector(".pdfOrientation")
       .addEventListener("change", e => {
-        this.orientation = e.target.id;
+        this.orientation = e.target.id[0];
       });
     this.elements.container
       .querySelector(".table-theme")
