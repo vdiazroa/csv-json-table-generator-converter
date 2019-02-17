@@ -31,13 +31,9 @@ export default class UploadFile extends TableGenerator {
   }
   formatData(csv) {
     try {
-      const text = csv.target.result
-        .replace(/\r/g, "")
-        .replace(/\t/g, ",")
-        .replace(/;/g, ",");
-
+      const text = csv.target.result.replace(/\t/g, ",").replace(/;/g, ",");
       const regex = /([^\n,]+,)+[^\n,]+\n/g;
-      if (!regex.test(text)) throw new Error("Not Valid CSV file");
+      if (!regex.test(text)) throw Error;
 
       this.options.data = text.split(/\r?\n/);
       while (this.options.data.slice(-1)[0] === "") this.options.data.pop();
@@ -48,7 +44,7 @@ export default class UploadFile extends TableGenerator {
         return element.split(",").length !== titlesLenght;
       });
 
-      if (checkLength) throw new Error("Not Valid CSV file");
+      if (checkLength) throw Error;
       this.elements.alertError.style.display = "none";
       this.elements.alertSuccess.style.display = "block";
       this.next();
