@@ -82,9 +82,11 @@ export default class TableGenerator {
   }
 
   collectionToCsv() {
-    return this.addFilters().reduce((string, col) => {
-      return string + "\n" + Object.values(col).join(",");
-    }, Object.keys(this.collection[0]).join(","));
+    if (this.collection) {
+      return this.addFilters().reduce((string, col) => {
+        return string + "\n" + Object.values(col).join(",");
+      }, this.options.titles.join(","));
+    } else return this.options.titles.join(",");
   }
 
   collectionToJSON() {
