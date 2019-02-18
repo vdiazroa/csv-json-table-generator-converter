@@ -30,16 +30,18 @@ export default class UploadFile extends TableGenerator {
       const regex = /([^\n,]+\n)|([^\n,]+(,[^\n,])+\n)/g;
       if (!regex.test(text)) throw new Error("Not Valid CSV file");
 
-      this.options.data = text.split(/\r?\n/);
-      while (this.options.data.slice(-1)[0] === "") this.options.data.pop();
-      this.options.titles = this.options.data.shift().split(",");
-      const titlesLenght = this.options.titles.length;
+      const data = text.split(/\r?\n/);
+      while (data.slice(-1)[0] === "") data.pop();
+      const titles = data.shift().split(",");
+      const titlesLenght = titles.length;
 
-      const checkLength = this.options.data.some(element => {
+      const checkLength = data.some(element => {
         return element.split(",").length !== titlesLenght;
       });
       if (checkLength) throw new Error("Not Valid CSV file");
 
+      this.options.data = data;
+      this.options.titles = titles;
       this.alertUploaded();
       this.generateTableFromFile();
     } catch (error) {
