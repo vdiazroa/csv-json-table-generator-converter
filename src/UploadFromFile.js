@@ -27,7 +27,7 @@ export default class UploadFile extends TableGenerator {
   formatData(csv) {
     try {
       const text = csv.target.result.replace(/\t/g, ",").replace(/;/g, ",");
-      const regex = /([^\n,]+(,[^\n,]+)\n)|([^\n,]+\n)|([^\n,]+(,[^\n,]+))/g;
+      const regex = /([^\n,]+(,[^\n,]+)?)\n?/g;
       if (!regex.test(text)) throw new Error("Not Valid CSV file");
 
       const data = text.split(/\r?\n/);
