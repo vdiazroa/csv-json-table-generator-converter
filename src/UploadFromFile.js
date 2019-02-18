@@ -80,7 +80,7 @@ export default class UploadFile extends TableGenerator {
     return `
     <div class="alert-csv"></div>
       <span class="custom-file mb-4">
-        <input type="file" class="custom-file-input csv-input" id="csv">
+        <input type="file" class="custom-file-input csv-input" id="csv" accept=".csv, .txt">
         <label class="custom-file-label" for="csv">Choose CSV file</label>
       </span>
     <span class="card border-secondary">
