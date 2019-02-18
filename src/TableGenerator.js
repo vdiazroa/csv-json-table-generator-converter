@@ -262,6 +262,7 @@ export default class TableGenerator {
         }
       });
   }
+
   insertTableBtns() {
     const containerNumber = this.options.container.slice(-1);
     this.elements.container.querySelector(
@@ -274,12 +275,12 @@ export default class TableGenerator {
 
       <span class="btn-group btn-group-toggle table-theme col mb-3 custom-control-inline" >
         <label class="btn btn-dark active dark-theme">
-          <input type="radio" name="options" id="dark-theme" autocomplete="off" ${this
-            .theme === "dark-theme" && "checked"}> Dark Theme
+          <input type="radio" name="options" id="dark-theme" autocomplete="off" 
+            ${this.theme === "dark-theme" && "checked"}> Dark Theme
         </label>
         <label class="btn btn-light light-theme">
-          <input type="radio" name="options" id="light-theme" autocomplete="off" ${this
-            .theme === "light-theme" && "checked"}> Light Theme
+          <input type="radio" name="options" id="light-theme" autocomplete="off" 
+            ${this.theme === "light-theme" && "checked"}> Light Theme
         </label>
       </span>
 
@@ -295,8 +296,8 @@ export default class TableGenerator {
           </div>
           <div class="custom-radio">
             <input type="radio" id="${"p" + containerNumber}" 
-              name=${"pdf" + containerNumber} class="custom-control-input 
-              ${this.orientation === "p" && "checked"}">        
+              name=${"pdf" + containerNumber} class="custom-control-input" 
+              ${this.orientation === "p" && "checked"}>        
             <label class="custom-control-label" for="${"p" + containerNumber}">
               portrait
             </label>
