@@ -21,12 +21,12 @@ export default class UploadFile extends TableGenerator {
   readFile(file) {
     const reader = new FileReader();
     reader.readAsText(file);
-    reader.onload = file => this.formatData(file);
+    reader.onload = file => this.formatData(file.target.result);
   }
 
   formatData(csv) {
     try {
-      const text = csv.target.result.replace(/\t/g, ",").replace(/;/g, ",");
+      const text = csv.replace(/\t|;/g, ",");
       const regex = /[^\n,]+(,[^\n,]+)?\n?/g;
       if (!regex.test(text)) throw new Error("Not Valid CSV file");
 
@@ -42,10 +42,10 @@ export default class UploadFile extends TableGenerator {
 
       this.options.data = data;
       this.options.titles = titles;
-      this.alertUploaded();
+      this.alert();
       this.generateTableFromFile();
     } catch (error) {
-      this.alertError(error);
+      this.alert(error);
     }
   }
 
@@ -58,27 +58,19 @@ export default class UploadFile extends TableGenerator {
     this.generateTable();
   }
 
-  alertError(error) {
+  alert(error) {
+    let alertType = "success";
+    error && (alertType = "error");
+
     this.elements.alert.innerHTML = `
-    <div class="alert alert-danger top alert-error" role="alert">
-      <strong>ERROR!</strong> ${error.message}
+    <div class="alert alert-${error ? "danger" : alertType}" 
+      role="alert">
+      <strong>${alertType.toUpperCase()}!</strong> 
+      ${(error && error.message) || " CSV File has been successfully uploaded"}
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>`;
-    this.elements.alert.querySelector(".close").addEventListener("click", e => {
-      this.elements.alert.innerHTML = "";
-    });
-  }
-
-  alertUploaded() {
-    this.elements.alert.innerHTML = `
-    <div class="alert alert-success top alert-uploaded" role="alert">
-      <strong>SUCCESS!</strong> CSV File has been successfully uploaded.
-      <button type="button" class=" close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div> `;
     this.elements.alert.querySelector(".close").addEventListener("click", e => {
       this.elements.alert.innerHTML = "";
     });
