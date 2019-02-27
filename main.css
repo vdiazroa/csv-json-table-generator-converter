@@ -2,7 +2,7 @@
   font-weight: 700;
 }
 .input {
-  width: 14%;
+  min-width:0;
   margin: 1%;
 }
 .border-red,
